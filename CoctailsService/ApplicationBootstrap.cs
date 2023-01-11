@@ -1,4 +1,8 @@
-﻿using Infrastructure;
+﻿using Application.Repositories;
+using Application.Services;
+using Application.Services.Interfaces;
+using Infrastructure;
+using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System.Data.SqlClient;
 
@@ -8,6 +12,19 @@ namespace CoctailsService
     {
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
+            services.AddSingleton<ITokenService, TokenService>();
+
+            //user
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IUserRepository, UserRepository>();
+
+            //igridient
+            services.AddScoped<IIngridientRepository, IngridientRepository>();
+            services.AddScoped<IIngridientService, IngridientService>();
+
+            //coctail
+            services.AddScoped<ICoctailRepository, CoctailRepository>();
+            services.AddScoped<ICoctailService, CoctailService>();
 
             return services;
         }
