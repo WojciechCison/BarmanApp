@@ -12,7 +12,7 @@ namespace Domain.Entities
 
         public string Name { get; set; }
 
-        public IList<CoctailIngridientEntity> CoctailIngridients { get; private set; } = new List<CoctailIngridientEntity>();
+        public IList<CoctailIngridientEntity> CoctailIngridients { get; set; } = new List<CoctailIngridientEntity>();
 
         public IList<UserCoctailEntity> UserCoctails { get; private set; } = new List<UserCoctailEntity>();
 

@@ -17,7 +17,5 @@ namespace Domain.Entities
         public IngridientEntity Ingridient { get; set; }
 
         public double Dose { get; set; }
-
-        public string Unit { get; set; }    
     }
 }
