@@ -1,9 +1,9 @@
-﻿using Domain.Entities;
-
-namespace CoctailsService.Models
+﻿namespace CoctailsService.Models
 {
-    public class CoctailRequest
+    public class CoctailResponse
     {
+        public int Id { get; set; }
+
         public string Name { get; set; }
 
         public Dictionary<int, double> Ingridients { get; set; }
