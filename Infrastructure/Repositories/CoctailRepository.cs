@@ -44,7 +44,14 @@ namespace Infrastructure.Repositories
 
         public async Task<IEnumerable<CoctailEntity>> GetCoctailsAsync()
         {
-            return await this.context.Coctails.ToListAsync();
+            var coctails = await this.context.Coctails.ToListAsync();
+
+            foreach (var item in coctails)
+            {
+                item.CoctailIngridients = await this.context.CoctailIngridients.Where(x => x.CoctailId == item.Id).ToListAsync();
+            }
+
+            return coctails;
         }
     }
 }
