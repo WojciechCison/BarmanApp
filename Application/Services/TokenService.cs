@@ -23,7 +23,7 @@ namespace Application.Services
 
         public bool ValidateToken(string token)
         {
-            return Tokens.Any(t => t.Token == token && t.ExpireTime < DateTime.Now);
+            return Tokens.Any(t => t.Token == token && t.ExpireTime > DateTime.Now);
         }
     }
 }
