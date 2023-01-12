@@ -10,15 +10,22 @@ namespace CoctailsService.Controllers
     public class IngridientController : Controller
     {
         private readonly IIngridientService igridientService;
+        private readonly ITokenService tokenService;
 
-        public IngridientController(IIngridientService igridientService)
+        public IngridientController(IIngridientService igridientService, ITokenService tokenService)
         {
             this.igridientService = igridientService;
+            this.tokenService = tokenService;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
+        [HttpGet("{token}")]
+        public async Task<IActionResult> GetAll(string token)
         {
+            if(token == null || !this.tokenService.ValidateToken(token))
+            {
+                return Unauthorized();
+            }
+
             try
             {
                 var igridients = await this.igridientService.GetIngridientsAsync();
@@ -31,9 +38,14 @@ namespace CoctailsService.Controllers
             }
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Add([FromBody] IngridientRequest ingridient)
+        [HttpPost("{token}")]
+        public async Task<IActionResult> Add([FromBody] IngridientRequest ingridient, string token)
         {
+            if (token == null || !this.tokenService.ValidateToken(token))
+            {
+                return Unauthorized();
+            }
+
             try
             {
                 var newIngridient = new IngridientEntity
@@ -53,8 +65,13 @@ namespace CoctailsService.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id, [FromBody] string token)
         {
+            if (token == null || !this.tokenService.ValidateToken(token))
+            {
+                return Unauthorized();
+            }
+
             try
             {
                 await this.igridientService.Delete(id);
