@@ -15,5 +15,7 @@ namespace Domain.Entities
         public string Unit { get; set; }
 
         public IList<CoctailIngridientEntity> CoctailIngridients { get; private set; } = new List<CoctailIngridientEntity>();
+
+        public StoragedIngridientEntity StoragedIngridientEntity { get; set; }
     }
 }

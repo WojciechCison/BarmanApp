@@ -3,6 +3,7 @@ using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(CoctailsContext))]
-    partial class CoctailsContextModelSnapshot : ModelSnapshot
+    [Migration("20230116213119_StoragedIngridientsTableAddKey")]
+    partial class StoragedIngridientsTableAddKey
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -77,7 +80,7 @@ namespace Infrastructure.Migrations
                     b.ToTable("Ingridients");
                 });
 
-            modelBuilder.Entity("Domain.Entities.StoragedIngridientEntity", b =>
+            modelBuilder.Entity("Domain.Entities.SotoragedIngridientEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -96,7 +99,7 @@ namespace Infrastructure.Migrations
                     b.HasIndex("IngridientId")
                         .IsUnique();
 
-                    b.ToTable("StoragedIngridients");
+                    b.ToTable("SotoragedIngridientEntity");
                 });
 
             modelBuilder.Entity("Domain.Entities.UserCoctailEntity", b =>
@@ -162,11 +165,11 @@ namespace Infrastructure.Migrations
                     b.Navigation("Ingridient");
                 });
 
-            modelBuilder.Entity("Domain.Entities.StoragedIngridientEntity", b =>
+            modelBuilder.Entity("Domain.Entities.SotoragedIngridientEntity", b =>
                 {
                     b.HasOne("Domain.Entities.IngridientEntity", "Ingridient")
-                        .WithOne("StoragedIngridientEntity")
-                        .HasForeignKey("Domain.Entities.StoragedIngridientEntity", "IngridientId")
+                        .WithOne("SotoragedIngridientEntity")
+                        .HasForeignKey("Domain.Entities.SotoragedIngridientEntity", "IngridientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -203,7 +206,7 @@ namespace Infrastructure.Migrations
                 {
                     b.Navigation("CoctailIngridients");
 
-                    b.Navigation("StoragedIngridientEntity")
+                    b.Navigation("SotoragedIngridientEntity")
                         .IsRequired();
                 });
 

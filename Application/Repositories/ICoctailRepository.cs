@@ -10,8 +10,11 @@ namespace Application.Repositories
     public interface ICoctailRepository
     {
         Task<IEnumerable<CoctailEntity>> GetCoctailsAsync();
+
         Task<CoctailEntity> AddAsync(CoctailEntity coctail);
+
         Task DeleteAsync(int id);
+
         Task EditAsync(CoctailEntity coctail);
     }
 }

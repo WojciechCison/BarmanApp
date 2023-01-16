@@ -10,7 +10,11 @@ namespace Application.Repositories
     public interface IIngridientRepository
     {
         Task<IEnumerable<IngridientEntity>> GetIngridientsAsync();
+
         Task AddAsync(IngridientEntity ingridient);
+
         Task DeleteAsync(int id);
+
+        Task EditStorageAsync(int id, double dose, bool add);
     }
 }
