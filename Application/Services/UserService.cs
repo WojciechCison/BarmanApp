@@ -18,6 +18,11 @@ namespace Application.Services
             this.userRepository = userRepository;
         }
 
+        public async Task EditUserCoctail(int userId, int coctailId, bool add)
+        {
+            await this.userRepository.EditUserCoctail(userId, coctailId, add);
+        }
+
         public async Task<UserEntity> GetById(int id)
         {
             return await this.userRepository.GetByIdAsync(id);

@@ -9,5 +9,7 @@ namespace Application.Services.Interfaces
         public Task<bool> Register(UserEntity userEntity);
 
         public Task<UserEntity> GetById(int id);
+
+        Task EditUserCoctail(int userId, int coctailId, bool add);
     }
 }

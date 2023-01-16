@@ -43,7 +43,30 @@ namespace Infrastructure.Repositories
 
         public async Task<UserEntity> GetByIdAsync(int id)
         {
-            return await context.Users.FirstOrDefaultAsync(x => x.Id == id);
+            var user =  await this.context.Users.FirstOrDefaultAsync(x => x.Id == id);
+            user.FavoriteCoctailsList = await this.context.UserCoctails.Where(x => x.UserId == id).ToListAsync();
+            return user;
+        }
+
+        public async Task EditUserCoctail(int userId, int coctailId, bool add)
+        {
+            if(add)
+            {
+
+                var usercoctailList = new UserCoctailEntity()
+                {
+                    CoctailId = coctailId,
+                    UserId = userId,
+                };
+                
+                this.context.UserCoctails.Add(usercoctailList);
+            }
+            else
+            {
+                this.context.UserCoctails.Remove(this.context.UserCoctails.FirstOrDefault(x => x.CoctailId == coctailId && x.UserId == userId));
+            }
+
+            await this.context.SaveChangesAsync();
         }
     }
 }
