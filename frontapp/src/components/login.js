@@ -14,6 +14,7 @@ import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { margin } from '@mui/system';
 import { useNavigate } from "react-router-dom";
+import axios from 'axios';
 
 
 const theme = createTheme();
@@ -22,11 +23,20 @@ export default function SignInSide() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-  };
+          const loginData = {
+              email: data.get('email'),
+              password: data.get('password'),
+          };
+      console.log(loginData);
+          //axios.defaults.headers.post['Access-Control-Allow-Origin'] = 'http://localhost:3000';
+          axios.post("http://localhost:5555/users/login", loginData)
+              .then(response => {
+                  console.log(response);
+              })
+              .catch(error => {
+                  console.log(error);
+              }); 
+    };
 
   return (
     <ThemeProvider theme={theme}>

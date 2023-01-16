@@ -22,6 +22,7 @@ def login():
             json=json.loads(request.data),
             )
         resp = r.status_code
+        r.headers['Access-Control-Allow-Origin'] = 'http://localhost:3000'
         resp_json = r.json()
         token = resp_json['token']['token']
         if resp >= 200 and resp < 300:
