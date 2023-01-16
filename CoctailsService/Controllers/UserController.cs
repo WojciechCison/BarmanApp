@@ -55,5 +55,45 @@ namespace CoctailsService.Controllers
 
             return NoContent();
         }
+
+        [HttpPut]
+        [Route("Coctails/{userId}/Add{coctailId}")]
+        public async Task<IActionResult> AddFavoriteCoctail(int userId, int coctailId, [FromBody] string token)
+        {
+            if (token == null || !this.tokenService.ValidateToken(token))
+            {
+                return Unauthorized();
+            }
+
+            try
+            {
+                await this.userService.EditUserCoctail(userId, coctailId, true);
+                return Ok();
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpPut]
+        [Route("Coctails/{userId}/Remove{coctailId}")]
+        public async Task<IActionResult> RemoveFavoriteCoctail(int userId, int coctailId, [FromBody] string token)
+        {
+            if (token == null || !this.tokenService.ValidateToken(token))
+            {
+                return Unauthorized();
+            }
+
+            try
+            {
+                await this.userService.EditUserCoctail(userId, coctailId, false);
+                return Ok();
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+        }
     }
 }

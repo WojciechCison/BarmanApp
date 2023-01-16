@@ -16,14 +16,21 @@ namespace Application.Services
                 ExpireTime = DateTime.Now.AddDays(1)
             };
 
-            Tokens.Add(token);
+            this.Tokens.Add(token);
 
             return token;
         }
 
         public bool ValidateToken(string token)
         {
-            return Tokens.Any(t => t.Token == token && t.ExpireTime > DateTime.Now);
+            this.RemoveOutdatedToken();
+
+            return Tokens.Any(t => t.Token == token);
+        }
+
+        private void RemoveOutdatedToken()
+        {
+            this.Tokens.RemoveAll(x => x.ExpireTime < DateTime.Now);
         }
     }
 }
