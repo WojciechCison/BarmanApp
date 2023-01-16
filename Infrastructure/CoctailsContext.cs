@@ -24,6 +24,8 @@ namespace Infrastructure
 
         public virtual DbSet<UserCoctailEntity> UserCoctails { get; set; }
 
+        public virtual DbSet<StoragedIngridientEntity> StoragedIngridients { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(System.Reflection.Assembly.GetExecutingAssembly());

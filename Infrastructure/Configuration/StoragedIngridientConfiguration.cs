@@ -9,14 +9,11 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Configuration
 {
-    public class IngridientConfiguration : IEntityTypeConfiguration<IngridientEntity>
+    public class StoragedIngridientConfiguration : IEntityTypeConfiguration<StoragedIngridientEntity>
     {
-        public void Configure(EntityTypeBuilder<IngridientEntity> builder)
+        public void Configure(EntityTypeBuilder<StoragedIngridientEntity> builder)
         {
             builder.HasKey(e => e.Id);
-            builder.HasOne(a => a.StoragedIngridientEntity)
-                .WithOne(b => b.Ingridient)
-                .HasForeignKey<StoragedIngridientEntity>(c => c.IngridientId);
         }
     }
 }

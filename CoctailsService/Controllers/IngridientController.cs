@@ -83,5 +83,47 @@ namespace CoctailsService.Controllers
                 return BadRequest();
             }
         }
+
+        [HttpPut]
+        [Route("/Storage{id}/Add/{dose}")]
+        public async Task<IActionResult> AddSoragedIngridient(int id, [FromBody] string token, double dose)
+        {
+            if (token == null || !this.tokenService.ValidateToken(token))
+            {
+                return Unauthorized();
+            }
+
+            try
+            {
+                await this.igridientService.EditStorage(id, dose, true);
+
+                return NoContent();
+            }
+            catch (Exception e)
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpPut]
+        [Route("/Storage{id}/Remove/{dose}")]
+        public async Task<IActionResult> RemoveSoragedIngridient(int id, [FromBody] string token, double dose)
+        {
+            if (token == null || !this.tokenService.ValidateToken(token))
+            {
+                return Unauthorized();
+            }
+
+            try
+            {
+                await this.igridientService.EditStorage(id, dose, false);
+
+                return NoContent();
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+        }
     }
 }

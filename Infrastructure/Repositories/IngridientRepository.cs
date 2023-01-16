@@ -39,5 +39,35 @@ namespace Infrastructure.Repositories
         {
             return await this.context.Ingridients.ToListAsync();
         }
+
+        public async Task EditStorageAsync(int id, double dose, bool add)
+        {
+            var ingridient = await this.context.StoragedIngridients.FirstOrDefaultAsync(x => x.IngridientId == id);
+
+            if(add)
+            {
+                if (ingridient != null)
+                {
+                    ingridient.Quantity += dose;
+                }
+                else
+                {
+                    await this.context.StoragedIngridients.AddAsync(new StoragedIngridientEntity { IngridientId = id, Quantity = dose });
+                }
+            }
+            else
+            {
+                if(ingridient == null || ingridient.Quantity < dose)
+                {
+                    throw new Exception("Incorrect dose");
+                }
+                else
+                {
+                    ingridient.Quantity -= dose;
+                }
+            }
+
+            this.context.SaveChanges();
+        }
     }
 }
