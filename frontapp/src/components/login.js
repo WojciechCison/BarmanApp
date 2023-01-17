@@ -13,8 +13,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { margin } from '@mui/system';
-import { useNavigate } from "react-router-dom";
 import axios from 'axios';
+import { NavLink } from 'react-router-dom';
 
 
 const theme = createTheme();
@@ -24,8 +24,8 @@ export default function SignInSide() {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
           const loginData = {
-              email: data.get('email'),
-              password: data.get('password'),
+      email: data.get('email'),
+      password: data.get('password'),
           };
       console.log(loginData);
           //axios.defaults.headers.post['Access-Control-Allow-Origin'] = 'http://localhost:3000';
@@ -35,8 +35,8 @@ export default function SignInSide() {
               })
               .catch(error => {
                   console.log(error);
-              }); 
-    };
+    });
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -110,18 +110,19 @@ export default function SignInSide() {
                 Sign In
               </Button>
               <Grid container>
-                <Grid item xs>
-                  <Link href="#" variant="body2">
-                    Forgot password?
-                  </Link>
-                </Grid>
-                <Grid item>
-                  <Link href="/signup" variant="body2">
-                    "Don't have an account? Sign Up"
-                    
-                    
-                  </Link>
-                </Grid>
+              <Button
+                variant="outlined"
+                sx={{ mt: 3, mb: 2, mr: 30}}>
+                 <NavLink to="signup" > Forgot password ? </NavLink>
+              </Button>
+                
+                <Button
+                variant="outlined"
+                sx={{ mt: 3, mb: 2 }}>
+                 <NavLink to="signup" > Don't have an account ? Sign Up </NavLink>
+              </Button>
+
+
               </Grid>
             </Box>
           </Box>
