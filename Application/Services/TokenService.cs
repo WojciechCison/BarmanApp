@@ -25,7 +25,7 @@ namespace Application.Services
         {
             this.RemoveOutdatedToken();
 
-            return Tokens.Any(t => t.Token == token);
+            return Tokens.Any(t => t.Token == token.TrimEnd());
         }
 
         private void RemoveOutdatedToken()
