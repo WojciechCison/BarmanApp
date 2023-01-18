@@ -50,7 +50,7 @@ namespace CoctailsService.Controllers
             {
                 await this.coctailService.Add(coctail.Name, coctail.Ingridients);
 
-                return NoContent();
+                return Ok("Ok");
             }
             catch (Exception)
             {
@@ -70,7 +70,7 @@ namespace CoctailsService.Controllers
             {
                 await this.coctailService.Delete(id);
 
-                return NoContent();
+                return Ok("Ok");
             }
             catch (Exception)
             {

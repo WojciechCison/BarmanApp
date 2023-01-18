@@ -56,7 +56,7 @@ namespace CoctailsService.Controllers
 
                 await this.igridientService.Add(newIngridient);
 
-                return NoContent();
+                return Ok("Ok");
             }
             catch (Exception)
             {
@@ -76,7 +76,7 @@ namespace CoctailsService.Controllers
             {
                 await this.igridientService.Delete(id);
 
-                return NoContent();
+                return Ok("Ok");
             }
             catch (Exception)
             {
@@ -97,7 +97,7 @@ namespace CoctailsService.Controllers
             {
                 await this.igridientService.EditStorage(id, dose, true);
 
-                return NoContent();
+                return Ok("Ok");
             }
             catch (Exception e)
             {
@@ -118,7 +118,7 @@ namespace CoctailsService.Controllers
             {
                 await this.igridientService.EditStorage(id, dose, false);
 
-                return NoContent();
+                return Ok("Ok");
             }
             catch (Exception)
             {
