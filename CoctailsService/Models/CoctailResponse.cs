@@ -1,4 +1,6 @@
-﻿namespace CoctailsService.Models
+﻿using Domain.Entities;
+
+namespace CoctailsService.Models
 {
     public class CoctailResponse
     {
@@ -6,6 +8,6 @@
 
         public string Name { get; set; }
 
-        public Dictionary<int, double> Ingridients { get; set; }
+        public IEnumerable<IngridientEntity> Ingridients { get; set; }
     }
 }
