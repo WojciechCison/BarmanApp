@@ -14,16 +14,14 @@ import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { margin } from '@mui/system';
 import axios from 'axios';
-import { NavLink } from 'react-router-dom';
-import { loginRequest } from '../services/auth';
-
+import { NavLink, Navigate, useNavigate } from 'react-router-dom';
+import { loginRequest, getToken } from '../services/auth';
 
 const theme = createTheme();
 const brake = { margin: '30px 0' }
 export default function SignInSide() {
-  const handleSubmit = (event) => {
-    console.log("dupa")
-    console.log(event)
+  const navigate = useNavigate();
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const loginData = {
@@ -31,7 +29,10 @@ export default function SignInSide() {
       password: data.get('password'),
     };
     console.log(loginData);
-    loginRequest(loginData)
+    await loginRequest(loginData)
+    if(getToken()){
+      navigate("/barmanmain");
+    }
   }
 
   return (
