@@ -50,7 +50,7 @@ namespace CoctailsService.Controllers
             {
                 await this.coctailService.Add(coctail.Name, coctail.Ingridients);
 
-                return Ok("Ok");
+                return Ok();
             }
             catch (Exception)
             {
@@ -58,8 +58,8 @@ namespace CoctailsService.Controllers
             }
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id, [FromBody] string token)
+        [HttpDelete("{id}/{token}")]
+        public async Task<IActionResult> Delete(int id, string token)
         {
             if (token == null || !this.tokenService.ValidateToken(token))
             {
@@ -70,7 +70,7 @@ namespace CoctailsService.Controllers
             {
                 await this.coctailService.Delete(id);
 
-                return Ok("Ok");
+                return Ok();
             }
             catch (Exception)
             {

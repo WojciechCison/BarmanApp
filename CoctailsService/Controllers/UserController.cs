@@ -53,12 +53,12 @@ namespace CoctailsService.Controllers
                 return BadRequest();
             }
 
-            return Ok("Ok");
+            return Ok();
         }
 
         [HttpPut]
-        [Route("Coctails/{userId}/Add{coctailId}")]
-        public async Task<IActionResult> AddFavoriteCoctail(int userId, int coctailId, [FromBody] string token)
+        [Route("Coctails/{userId}/Add/{coctailId}/{token}")]
+        public async Task<IActionResult> AddFavoriteCoctail(int userId, int coctailId, string token)
         {
             if (token == null || !this.tokenService.ValidateToken(token))
             {
@@ -68,7 +68,7 @@ namespace CoctailsService.Controllers
             try
             {
                 await this.userService.EditUserCoctail(userId, coctailId, true);
-                return Ok("Ok");
+                return Ok();
             }
             catch (Exception)
             {
@@ -77,8 +77,8 @@ namespace CoctailsService.Controllers
         }
 
         [HttpPut]
-        [Route("Coctails/{userId}/Remove{coctailId}")]
-        public async Task<IActionResult> RemoveFavoriteCoctail(int userId, int coctailId, [FromBody] string token)
+        [Route("Coctails/{userId}/Remove/{coctailId}/{token}")]
+        public async Task<IActionResult> RemoveFavoriteCoctail(int userId, int coctailId, string token)
         {
             if (token == null || !this.tokenService.ValidateToken(token))
             {
@@ -89,7 +89,7 @@ namespace CoctailsService.Controllers
             {
                 await this.userService.EditUserCoctail(userId, coctailId, false);
 
-                return Ok("Ok");
+                return Ok();
             }
             catch (Exception)
             {
