@@ -31,7 +31,7 @@ def register():
             'http://localhost:5233/users/Register', 
             json=json.loads(request.data),
             )
-        return r.status_code
+        return jsonify(status=r.status_code, error=r.status_code)
     else:
         return 'register page'
     
@@ -39,17 +39,17 @@ def register():
 def coctails(token):
     if request.method == "POST":
         r = requests.post(
-            'http://localhost:5233/coctails/'+str(token), 
+            f'http://localhost:5233/coctails/{token}', 
             json=json.loads(request.data),
             )
-        return r
+        return str(r.status_code)
     else:   
         r_coctails = requests.get(
-            'http://localhost:5233/coctails/'+str(token)
+            f'http://localhost:5233/coctails/{token}'
             )
 
         r_ingridients = requests.get(
-            'http://localhost:5233/ingridients/'+str(token)
+            f'http://localhost:5233/ingridients/{token}'
             )
         r_coctails_json = r_coctails.json()        
         r_ingridients_json = r_ingridients.json()
@@ -68,9 +68,9 @@ def coctails(token):
 def delete_coctail(id):
     if request.method == "DELETE":
         r = requests.delete(
-            'http://localhost:5233/coctails/'+str(id)
+            f'http://localhost:5233/coctails/{id}'
             )
-        return r.status_code
+        return jsonify(status=r.status_code, error=r.status_code)
 
 @app.route('/ingridients/<token>', methods=["POST", "GET"])
 def ingridients(token):
@@ -83,7 +83,7 @@ def ingridients(token):
         return r
     else:   
         r_ingridients = requests.get(
-            'http://localhost:5233/ingridients/'+str(token)
+            f'http://localhost:5233/ingridients/{token}'
             )
         #r_coctails_json = r_coctails.json()        
         r_ingridients_json = r_ingridients.json()
@@ -93,44 +93,45 @@ def ingridients(token):
 def delete_ingridient(id):
     if request.method == "DELETE":
         r = requests.delete(
-            'http://localhost:5233/ingridients/'+str(id)
+            f'http://localhost:5233/ingridients/{id}'
             )
-        return r.status_code
+        return jsonify(status=r.status_code, error=r.status_code)
 
-@app.route('/Storage<id>/Add/<dose>', methods=["PUT"])
-def add_to_storage(id, dose):
+@app.route('/Storage/<id>/Add/<dose>/<token>', methods=["PUT"])
+def add_to_storage(id, dose, token):
     if request.method == "PUT":
         r = requests.put(
-            'http://localhost:5233/Storage'+str(id)+'/Add/'+str(dose),
-            json=json.loads(request.data)
+            f'http://localhost:5233/Storage/{id}/Add/{dose}/{token}'
+            #json=json.loads(request.data)
             )
-        return r.status_code
+        return jsonify(status=r.status_code, error=r.reason)
 
-@app.route('/Storage<id>/Remove/<dose>', methods=["PUT"])
-def remove_from_storage(id, dose):
+@app.route('/Storage/<id>/Remove/<dose>/<token>', methods=["PUT"])
+def remove_from_storage(id, dose, token):
     if request.method == "PUT":
         r = requests.put(
-            'http://localhost:5233/Storage'+str(id)+'/Remove/'+str(dose),
-            json=json.loads(request.data),
+            f'http://localhost:5233/Storage/{id}/Remove/{dose}/{token}',
+            #json=json.loads(request.data),
             )
-        return r.status_code
+        return jsonify(status=r.status_code, error=r.status_code)
 
-@app.route('/users/Coctails/<user_id>/Add<coctail_id>', methods=["PUT"])
-def add_user_coctail(user_id, coctail_id):
+@app.route('/users/Coctails/<user_id>/Add/<coctail_id>/<token>', methods=["PUT"])
+def add_user_coctail(user_id, coctail_id, token):
+    if request.method == "PUT":
+          r = requests.put(
+            f'http://localhost:5233/users/Coctails/{user_id}/Add/{coctail_id}/{token}',
+            #json=json.loads(request.data),
+            )    
+          return jsonify(status=r.status_code, error=r.status_code)
+
+                   
+@app.route('/users/Coctails/<user_id>/Remove/<coctail_id>/<token>', methods=["PUT"])
+def remove_user_coctail(user_id, coctail_id,token):
     if request.method == "PUT":
         r = requests.put(
-            'http://localhost:5233/users/Coctails/'+str(user_id)+'/Add'+str(coctail_id),
-            json=json.loads(request.data),
+            f'http://localhost:5233/users/Coctails/{user_id}/Remove/{coctail_id}/{token}',
+            #json=json.loads(request.data),
             )
-        return r.status_code
-
-@app.route('/users/Coctails/<user_id>/Remove<coctail_id>', methods=["PUT"])
-def remove_user_coctail(user_id, coctail_id):
-    if request.method == "PUT":
-        r = requests.put(
-            'http://localhost:5233/users/Coctails/'+str(user_id)+'/Remove'+str(coctail_id),
-            json=json.loads(request.data),
-            )
-        return r.status_code
+        return jsonify(status=r.status_code, error=r.status_code)
 
 
