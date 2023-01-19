@@ -53,7 +53,7 @@ namespace CoctailsService.Controllers
                 return BadRequest();
             }
 
-            return NoContent();
+            return Ok("Ok");
         }
 
         [HttpPut]
@@ -68,7 +68,7 @@ namespace CoctailsService.Controllers
             try
             {
                 await this.userService.EditUserCoctail(userId, coctailId, true);
-                return Ok();
+                return Ok("Ok");
             }
             catch (Exception)
             {
@@ -88,7 +88,8 @@ namespace CoctailsService.Controllers
             try
             {
                 await this.userService.EditUserCoctail(userId, coctailId, false);
-                return Ok();
+
+                return Ok("Ok");
             }
             catch (Exception)
             {

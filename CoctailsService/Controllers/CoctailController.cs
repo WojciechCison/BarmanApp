@@ -28,27 +28,9 @@ namespace CoctailsService.Controllers
 
             try
             {
-                var ingridients = await this.coctailService.GetCoctailsAsync();
-                var requestedIngridient = new List<CoctailResponse>();
+                var coctials = await this.coctailService.GetCoctailsAsync();
 
-                foreach (var item in ingridients)
-                {
-                    var coctail = new CoctailResponse
-                    {
-                        Id = item.Id,
-                        Name = item.Name,
-                        Ingridients = new Dictionary<int, double>()
-                    };
-
-                    foreach (var item2 in item.CoctailIngridients)
-                    {
-                        coctail.Ingridients.Add(item2.IngridientId, item2.Dose);
-                    }
-
-                    requestedIngridient.Add(coctail);
-                }
-
-                return Ok(requestedIngridient);
+                return Ok(coctials);
             }
             catch (Exception)
             {
@@ -68,7 +50,7 @@ namespace CoctailsService.Controllers
             {
                 await this.coctailService.Add(coctail.Name, coctail.Ingridients);
 
-                return NoContent();
+                return Ok("Ok");
             }
             catch (Exception)
             {
@@ -88,7 +70,7 @@ namespace CoctailsService.Controllers
             {
                 await this.coctailService.Delete(id);
 
-                return NoContent();
+                return Ok("Ok");
             }
             catch (Exception)
             {
