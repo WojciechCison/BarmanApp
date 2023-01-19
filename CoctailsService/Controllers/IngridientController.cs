@@ -85,7 +85,7 @@ namespace CoctailsService.Controllers
         }
 
         [HttpPut]
-        [Route("/Storage{id}/Add/{dose}/{token}")]
+        [Route("/Storage/{id}/Add/{dose}/{token}")]
         public async Task<IActionResult> AddSoragedIngridient(int id, string token, double dose)
         {
             if (token == null || !this.tokenService.ValidateToken(token))
@@ -106,7 +106,7 @@ namespace CoctailsService.Controllers
         }
 
         [HttpPut]
-        [Route("/Storage{id}/Remove/{dose}/{token}")]
+        [Route("/Storage/{id}/Remove/{dose}/{token}")]
         public async Task<IActionResult> RemoveSoragedIngridient(int id, string token, double dose)
         {
             if (token == null || !this.tokenService.ValidateToken(token))
