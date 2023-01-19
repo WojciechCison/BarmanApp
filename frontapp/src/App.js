@@ -6,6 +6,7 @@ import Link from '@mui/material/Link';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import SignInSide from './components/login';
 import SignUp from './components/signup';
+import Barmanmain from './components/barmanmain';
 
 function App() {
   return (
@@ -13,7 +14,7 @@ function App() {
       <Routes>
         <Route path='/' element={<SignInSide></SignInSide>} />
         <Route path='/signup' element={<SignUp></SignUp>} />
-
+        <Route path='/barmanmain' element={<Barmanmain></Barmanmain>} />
       </Routes>
     
     </BrowserRouter>

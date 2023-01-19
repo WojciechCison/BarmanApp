@@ -13,30 +13,30 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { margin } from '@mui/system';
-import axios from 'axios';
+//import axios from 'axios';
 import { NavLink } from 'react-router-dom';
 
 
 const theme = createTheme();
-const brake = {margin:'30px 0'}
+const brake = { margin: '30px 0' }
 export default function SignInSide() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-          const loginData = {
+    const loginData = {
       email: data.get('email'),
       password: data.get('password'),
-          };
-      console.log(loginData);
-          //axios.defaults.headers.post['Access-Control-Allow-Origin'] = 'http://localhost:3000';
-          axios.post("http://localhost:5555/users/login", loginData)
-              .then(response => {
-                  console.log(response);
-              })
-              .catch(error => {
-                  console.log(error);
-    });
+    };
+    console.log(loginData);
+    //axios.defaults.headers.post['Access-Control-Allow-Origin'] = 'http://localhost:3000';
+    //axios.post("http://localhost:5555/users/login", loginData)
+    //   .then(response => {
+    //      console.log(response);
+    //  })
+    // .catch(error => {
+    //     console.log(error);
   };
+  //  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -110,17 +110,23 @@ export default function SignInSide() {
                 Sign In
               </Button>
               <Grid container>
-              <Button
-                variant="outlined"
-                sx={{ mt: 3, mb: 2, mr: 30}}>
-                 <NavLink to="signup" > Forgot password ? </NavLink>
-              </Button>
-                
                 <Button
-                variant="outlined"
-                sx={{ mt: 3, mb: 2 }}>
-                 <NavLink to="signup" > Don't have an account ? Sign Up </NavLink>
-              </Button>
+                  variant="outlined"
+                  sx={{ mt: 3, mb: 2, mr: 30 }}>
+                  <NavLink to="signup" > Forgot password ? </NavLink>
+                </Button>
+
+                <Button
+                  variant="outlined"
+                  sx={{ mt: 3, mb: 2 }}>
+                  <NavLink to="signup" > Don't have an account ? Sign Up </NavLink>
+                </Button>
+
+                <Button
+                  variant="outlined"
+                  sx={{ mt: 3, mb: 2 }}>
+                  <NavLink to="Barmanmain" > Main APP </NavLink>
+                </Button>
 
 
               </Grid>
@@ -130,4 +136,4 @@ export default function SignInSide() {
       </Grid>
     </ThemeProvider>
   );
-}
+};
