@@ -12,6 +12,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { NavLink } from 'react-router-dom';
+import { signupRequest } from '../services/auth';
 
 
 
@@ -21,6 +23,13 @@ export default function SignUp() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    const signupData = {
+      name: data.get('firstName'),
+      surname: data.get('lastName'),
+      email: data.get('email'),
+      password: data.get('password'),
+    };
+    signupRequest(signupData)
     console.log({
       email: data.get('email'),
       password: data.get('password'),
@@ -89,26 +98,22 @@ export default function SignUp() {
                   autoComplete="new-password"
                 />
               </Grid>
-              <Grid item xs={12}>
-                <FormControlLabel
-                  control={<Checkbox value="allowExtraEmails" color="primary" />}
-                  label="I want to receive inspiration, marketing promotions and updates via email."
-                />
-              </Grid>
+
             </Grid>
             <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              onSubmit = {handleSubmit}
             >
               Sign Up
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="#" variant="body2">
-                  Already have an account? Sign in
-                </Link>
+              <Button>
+                  <NavLink to="/" > Already have an account? Sign in </NavLink>
+                </Button>
               </Grid>
             </Grid>
           </Box>
