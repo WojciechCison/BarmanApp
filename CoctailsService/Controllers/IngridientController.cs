@@ -18,8 +18,8 @@ namespace CoctailsService.Controllers
             this.tokenService = tokenService;
         }
 
-        [HttpGet("{token}")]
-        public async Task<IActionResult> GetAll(string token)
+        [HttpGet]
+        public async Task<IActionResult> GetAll([FromBody] string token)
         {
             if(token == null || !this.tokenService.ValidateToken(token))
             {
@@ -38,10 +38,10 @@ namespace CoctailsService.Controllers
             }
         }
 
-        [HttpPost("{token}")]
-        public async Task<IActionResult> Add([FromBody] IngridientRequest ingridient, string token)
+        [HttpPost]
+        public async Task<IActionResult> Add([FromBody] IngridientRequest ingridient)
         {
-            if (token == null || !this.tokenService.ValidateToken(token))
+            if (ingridient.Token == null || !this.tokenService.ValidateToken(ingridient.Token))
             {
                 return Unauthorized();
             }
@@ -64,8 +64,8 @@ namespace CoctailsService.Controllers
             }
         }
 
-        [HttpDelete("{id}/{token}")]
-        public async Task<IActionResult> Delete(int id, string token)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id, [FromBody] string token)
         {
             if (token == null || !this.tokenService.ValidateToken(token))
             {
@@ -85,8 +85,8 @@ namespace CoctailsService.Controllers
         }
 
         [HttpPut]
-        [Route("/Storage/{id}/Add/{dose}/{token}")]
-        public async Task<IActionResult> AddSoragedIngridient(int id, string token, double dose)
+        [Route("/Storage/{id}/Add/{dose}")]
+        public async Task<IActionResult> AddSoragedIngridient(int id, [FromBody] string token, double dose)
         {
             if (token == null || !this.tokenService.ValidateToken(token))
             {
@@ -106,8 +106,8 @@ namespace CoctailsService.Controllers
         }
 
         [HttpPut]
-        [Route("/Storage/{id}/Remove/{dose}/{token}")]
-        public async Task<IActionResult> RemoveSoragedIngridient(int id, string token, double dose)
+        [Route("/Storage/{id}/Remove/{dose}")]
+        public async Task<IActionResult> RemoveSoragedIngridient(int id, [FromBody] string token, double dose)
         {
             if (token == null || !this.tokenService.ValidateToken(token))
             {

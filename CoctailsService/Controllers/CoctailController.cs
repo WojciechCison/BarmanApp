@@ -18,8 +18,8 @@ namespace CoctailsService.Controllers
             this.tokenService = tokenService;
         }
 
-        [HttpGet("{token}")]
-        public async Task<IActionResult> GetAll(string token)
+        [HttpGet]
+        public async Task<IActionResult> GetAll([FromBody] string token)
         {
             if (token == null || !this.tokenService.ValidateToken(token))
             {
@@ -38,10 +38,10 @@ namespace CoctailsService.Controllers
             }
         }
 
-        [HttpPost("{token}")]
-        public async Task<IActionResult> Add([FromBody] CoctailRequest coctail, string token)
+        [HttpPost]
+        public async Task<IActionResult> Add([FromBody] CoctailRequest coctail)
         {
-            if (token == null || !this.tokenService.ValidateToken(token))
+            if (coctail.Token == null || !this.tokenService.ValidateToken(coctail.Token))
             {
                 return Unauthorized();
             }
@@ -58,8 +58,8 @@ namespace CoctailsService.Controllers
             }
         }
 
-        [HttpDelete("{id}/{token}")]
-        public async Task<IActionResult> Delete(int id, string token)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id, [FromBody] string token)
         {
             if (token == null || !this.tokenService.ValidateToken(token))
             {

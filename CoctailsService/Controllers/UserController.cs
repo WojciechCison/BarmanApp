@@ -57,8 +57,8 @@ namespace CoctailsService.Controllers
         }
 
         [HttpPut]
-        [Route("Coctails/{userId}/Add/{coctailId}/{token}")]
-        public async Task<IActionResult> AddFavoriteCoctail(int userId, int coctailId, string token)
+        [Route("Coctails/{userId}/Add/{coctailId}")]
+        public async Task<IActionResult> AddFavoriteCoctail(int userId, int coctailId,[FromBody] string token)
         {
             if (token == null || !this.tokenService.ValidateToken(token))
             {
@@ -77,8 +77,8 @@ namespace CoctailsService.Controllers
         }
 
         [HttpPut]
-        [Route("Coctails/{userId}/Remove/{coctailId}/{token}")]
-        public async Task<IActionResult> RemoveFavoriteCoctail(int userId, int coctailId, string token)
+        [Route("Coctails/{userId}/Remove/{coctailId}")]
+        public async Task<IActionResult> RemoveFavoriteCoctail(int userId, int coctailId,[FromBody] string token)
         {
             if (token == null || !this.tokenService.ValidateToken(token))
             {
