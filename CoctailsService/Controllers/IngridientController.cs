@@ -18,8 +18,8 @@ namespace CoctailsService.Controllers
             this.tokenService = tokenService;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAll([FromBody] string token)
+        [HttpGet("{token}")]
+        public async Task<IActionResult> GetAll( string token)
         {
             if(token == null || !this.tokenService.ValidateToken(token))
             {

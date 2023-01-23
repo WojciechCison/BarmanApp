@@ -12,7 +12,7 @@ namespace Application.Services
             var token = new ValidationToken
             {
                 UserId = userId,
-                Token = Convert.ToBase64String(Guid.NewGuid().ToByteArray()),
+                Token = Guid.NewGuid().ToString(),
                 ExpireTime = DateTime.Now.AddDays(1)
             };
 
