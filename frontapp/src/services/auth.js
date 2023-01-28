@@ -24,3 +24,4 @@ export const signupRequest = (signupData) => {
         console.log(error);
     })
 }
+

@@ -17,6 +17,7 @@ import axios from 'axios';
 import { NavLink, Navigate, useNavigate } from 'react-router-dom';
 import { loginRequest, getToken } from '../services/auth';
 
+
 const theme = createTheme();
 const brake = { margin: '30px 0' }
 export default function SignInSide() {
@@ -111,20 +112,16 @@ export default function SignInSide() {
 
 
 
-              <Grid container>
+              <div style={{textAlign:'right'}}>
 
-                <Button  sx={{ mr:10 }}>
-                <NavLink to="signup" > Don't have an account ? Sign Up </NavLink>
-                </Button>
-
-                <Button
-                  
-                  sx={{ mt: 3, mb: 2, pr: 40 }}>
-                  <NavLink to="Barmanmain" > Main APP </NavLink>
+                <Button>
+                <NavLink to="signup" style={{textDecoration: 'none'}} align = 'right' > Don't have an account ? Sign Up </NavLink>
                 </Button>
 
 
-              </Grid>
+
+
+              </div>
             </Box>
           </Box>
         </Grid>

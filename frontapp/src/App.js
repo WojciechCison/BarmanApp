@@ -7,6 +7,9 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import SignInSide from './components/login';
 import SignUp from './components/signup';
 import Barmanmain from './components/barmanmain';
+import Coctails from './components/coctails';
+import Ingredients from './components/ingredients';
+import User from './components/user';
 
 function App() {
   return (
@@ -15,6 +18,9 @@ function App() {
         <Route path='/' element={<SignInSide></SignInSide>} />
         <Route path='/signup' element={<SignUp></SignUp>} />
         <Route path='/barmanmain' element={<Barmanmain></Barmanmain>} />
+        <Route path='/coctails' element={<Coctails></Coctails>} />
+        <Route path='/ingredients' element={<Ingredients></Ingredients>} />
+        <Route path='/user' element={<User></User>} />
       </Routes>
     
     </BrowserRouter>

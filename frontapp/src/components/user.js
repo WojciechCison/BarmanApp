@@ -85,7 +85,7 @@ const theme = createTheme({
     },
   });
 
-export default class Barmanmain extends React.Component{
+export default class User extends React.Component{
   constructor(props){
     super();
     this.state = {}
@@ -122,7 +122,7 @@ export default class Barmanmain extends React.Component{
           sm={4}
           md={3}
           sx={{
-            backgroundImage: 'url(https://images.unsplash.com/photo-1607446045926-3aee01b43c17?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80)',
+            backgroundImage: 'url(https://images.unsplash.com/photo-1485872299829-c673f5194813?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2054&q=80)',
             backgroundRepeat: 'no-repeat',
             backgroundColor: (t) =>
               t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
@@ -143,10 +143,11 @@ export default class Barmanmain extends React.Component{
             </Typography>
             </div>
              <ThemeProvider theme={theme}>
+             { <NavLink to="/barmanmain" style={{textDecoration: 'none'}} >
              <Button color="neutral" style={{ height: 80, width: 200, marginTop: 10, marginLeft: 120 }} variant="contained" startIcon={<DeckIcon />}>
-                
                 Main Page
                 </Button>
+                </NavLink> }
 
                 { <NavLink to="/coctails" style={{textDecoration: 'none'}} >
                 <Button color="neutral" style={{ height: 80, width: 200, marginTop: 10, marginLeft: 30 }} variant="contained" startIcon={<LocalBarIcon />}>
@@ -161,6 +162,7 @@ export default class Barmanmain extends React.Component{
                 Ingredients
                 </Button>
                 </NavLink> }
+
 
 
                 { <NavLink to="/user" style={{textDecoration: 'none'}} >
@@ -186,56 +188,11 @@ export default class Barmanmain extends React.Component{
         maxWidth: '100%',
       }}>
                 </Grid>
-
-                <TableContainer >
-      <Table sx={{ minWidth: 650 }} aria-label="customized table">
-        <TableHead>
-          <StyledTableRow >
-            <StyledTableCell>Id</StyledTableCell>
-            <StyledTableCell>Coctail name</StyledTableCell>
-            <StyledTableCell align='right'>Ingridients</StyledTableCell>
-          </StyledTableRow >
-        </TableHead>
-        <TableBody>
-          {drinks?.data?.map((el) => (
-            <StyledTableRow 
-              key={el.id}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-              <Checkbox {...label}  />
-                {el.id}
-                </TableCell>
-              <TableCell component="th" scope="row">
-                {el.name}
-              </TableCell>
-              <TableCell align="right">
-              
-              <div>{el.coctailIngridients.map((test) => {
-            return(<div>{test.name+" "+test.dose+"x"+test.unit}</div>)
-          })}</div>
-              
-              
-              </TableCell>
-
-            </StyledTableRow >
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-
-            
-
-           
+  
       </Grid>
         </Grid>
 
       </div>
-
-      
-
-
-
 
       )
     }

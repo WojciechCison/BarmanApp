@@ -112,7 +112,7 @@ export default function SignUp() {
             <Grid container justifyContent="flex-end">
               <Grid item>
               <Button>
-                  <NavLink to="/" > Already have an account? Sign in </NavLink>
+                  <NavLink to="/" style={{textDecoration: 'none'}} > Already have an account? Sign in </NavLink>
                 </Button>
               </Grid>
             </Grid>
