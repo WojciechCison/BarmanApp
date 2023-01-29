@@ -1,4 +1,6 @@
 using CoctailsService;
+using Infrastructure;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +12,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddApplication();
 builder.Services.AddDatabase(builder.Configuration);
+builder.Services.AddLogging();
 
 var app = builder.Build();
 
@@ -20,8 +23,17 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<CoctailsContext>();
+    db.Database.Migrate();
+}
+
 app.UseAuthorization();
 
-app.MapControllers();
+app.MapControllers(); 
+
+var loggerFactory = app.Services.GetService<ILoggerFactory>();
+loggerFactory.AddFile(builder.Configuration["Logging:LogFilePath"].ToString());
 
 app.Run();
