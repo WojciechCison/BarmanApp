@@ -28,6 +28,7 @@ import Modal from '@mui/material/Modal';
 import AddIcon from '@mui/icons-material/Add';
 import TextField from '@mui/material/TextField';
 import RemoveIcon from '@mui/icons-material/Remove';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 
 const brake = { margin: '80px 30px' }
@@ -133,7 +134,18 @@ export default class Coctails extends React.Component{
   componentDidMount(){
     this.coctailsRequest();
   }
-
+  DeleteCoctail = (id)  => {
+    const token = getToken();
+    console.log(token)
+    const data = axios.delete(`http://localhost:5555/coctails/${id}`,{data:`"${token}"`} )
+    .then(response => {
+       this.coctailsRequest();
+        return response.data 
+    })
+    .catch(error => {
+        console.log(error);
+    })
+};
   
   
 
@@ -154,8 +166,8 @@ export default class Coctails extends React.Component{
             backgroundRepeat: 'no-repeat',
             backgroundColor: (t) =>
               t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
+              backgroundPosition: 'center',
+              height: '100%'
           }}
         />
 
@@ -262,24 +274,20 @@ export default class Coctails extends React.Component{
           </Box>
             </Modal>
 
-        <Button variant="outlined" style={{ height: 60, width: 200, marginBottom: 0,  marginTop: 80, marginLeft: 30 }} color="primary" startIcon={<RemoveIcon /> }> 
-                  Delete Coctail
-                </Button>
-        
                 </div>
 
                 </ThemeProvider>
                 
                 </Box>
 
-                <Grid style={{margin: '20px 30px'}}  sx={{
+                <Grid style={{margin: '20px 0px 0px 30px'}}  sx={{
         width: 1380,
-        maxWidth: '100%',
+        
       }}>
                 </Grid>
 
-                <TableContainer >
-      <Table  aria-label="customized table">
+                <TableContainer sx={{maxHeight:"60vh", overflowY:"auto"}} >
+      <Table sx={{ minWidth: 650, maxWidth: '70vw'}} style={{margin: '20px 0px 0px 30px'}} aria-label="customized table" stickyHeader>
         <TableHead>
           <StyledTableRow >
             <StyledTableCell>Id</StyledTableCell>
@@ -294,8 +302,9 @@ export default class Coctails extends React.Component{
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell component="th" scope="row">
-              <Checkbox {...label}  />
+              
                 {el.id}
+                <Button onClick={() => this.DeleteCoctail(el.id)}  startIcon={<DeleteIcon color="action" />} >  </Button>
                 </TableCell>
               <TableCell component="th" scope="row">
                 {el.name}
