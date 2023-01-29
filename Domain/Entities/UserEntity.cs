@@ -18,6 +18,8 @@ namespace Domain.Entities
 
         public string Password { get; set; }
 
+        public bool IsAdmin { get; set; }
+
         public IList<UserCoctailEntity> FavoriteCoctailsList { get;  set; } = new List<UserCoctailEntity>();
     }
 }

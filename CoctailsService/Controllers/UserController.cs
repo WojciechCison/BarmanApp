@@ -50,6 +50,7 @@ namespace CoctailsService.Controllers
                 Email = registerRequest.Email,
                 Name = registerRequest.Name,
                 Password = registerRequest.Password,
+                IsAdmin = registerRequest.IsAdmin,
             };
 
             if(!await this.userService.Register(user))

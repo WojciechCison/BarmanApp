@@ -14,6 +14,9 @@ namespace Infrastructure.Configuration
         public void Configure(EntityTypeBuilder<UserEntity> builder)
         {
             builder.HasKey(x => x.Id);
+
+            builder.Property(x => x.IsAdmin)
+                .HasDefaultValue(false);
         }
     }
 }
