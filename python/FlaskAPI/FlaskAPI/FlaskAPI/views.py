@@ -91,7 +91,6 @@ def ingridients_add():
 def ingridients(token):   
         r_ingridients = requests.get(
             f'http://localhost:5233/ingridients/{token}',
-            json=json.loads(request.data),
             )
         #r_coctails_json = r_coctails.json()        
         r_ingridients_json = r_ingridients.json()
