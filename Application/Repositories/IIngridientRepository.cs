@@ -16,5 +16,7 @@ namespace Application.Repositories
         Task DeleteAsync(int id);
 
         Task EditStorageAsync(int id, double dose, bool add);
+
+        Task<double> GetQuantityAsync(int id);
     }
 }

@@ -37,5 +37,10 @@ namespace Application.Services
         {
             return await this.ingridientRepository.GetIngridientsAsync();
         }
+
+        public async Task<double> GetQuantityAsync(int id)
+        {
+            return await this.ingridientRepository.GetQuantityAsync(id);
+        }
     }
 }

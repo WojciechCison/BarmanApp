@@ -16,5 +16,7 @@ namespace Application.Services.Interfaces
         Task Delete(int id);
 
         Task EditStorage(int id, double dose, bool add);
+
+        Task<double> GetQuantityAsync(int id);
     }
 }

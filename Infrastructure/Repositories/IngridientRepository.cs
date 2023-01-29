@@ -69,5 +69,18 @@ namespace Infrastructure.Repositories
 
             this.context.SaveChanges();
         }
+
+        public async Task<double> GetQuantityAsync(int id)
+        {
+            if(this.context.StoragedIngridients.Any(x => x.IngridientId == id))
+            {
+                var ingridient = await this.context.StoragedIngridients.FirstOrDefaultAsync(x => x.IngridientId == id);
+
+                return ingridient.Quantity;
+            }
+
+            return 0;
+            
+        }
     }
 }

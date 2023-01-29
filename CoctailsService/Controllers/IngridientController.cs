@@ -29,8 +29,21 @@ namespace CoctailsService.Controllers
             try
             {
                 var igridients = await this.igridientService.GetIngridientsAsync();
+                var list = new List<IngridientResponse>();
 
-                return Ok(igridients);
+                foreach (var ingridient in igridients)
+                {
+                    var quantity = await this.igridientService.GetQuantityAsync(ingridient.Id);
+                    list.Add(new IngridientResponse
+                    {
+                        Id = ingridient.Id,
+                        Name = ingridient.Name,
+                        Unit = ingridient.Unit,
+                        Quantity = quantity,
+                    });
+                }
+
+                return Ok(list);
             }
             catch (Exception)
             {
