@@ -68,5 +68,14 @@ namespace Infrastructure.Repositories
 
             await this.context.SaveChangesAsync();
         }
+
+        public async Task Authorize(string code)
+        {
+            var user = await this.context.Users.FirstOrDefaultAsync(x => x.Code == code);
+
+            user.Code = null;
+
+            await this.context.SaveChangesAsync();
+        }
     }
 }

@@ -2,6 +2,7 @@
 using Application.Services.Interfaces;
 using CoctailsService.Models;
 using Domain.Entities;
+using Identity.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CoctailsService.Controllers
@@ -51,12 +52,17 @@ namespace CoctailsService.Controllers
                 Name = registerRequest.Name,
                 Password = registerRequest.Password,
                 IsAdmin = registerRequest.IsAdmin,
+                Code = Guid.NewGuid().ToString(),
             };
 
-            if(!await this.userService.Register(user))
+            if (!await this.userService.Register(user))
             {
                 return BadRequest();
             }
+
+            var confirmationLink = @"http://localhost:5233/users/Veryfy/" + user.Code;
+            EmailHelper emailHelper = new EmailHelper();
+            emailHelper.SendEmail(user.Email, confirmationLink);
 
             this.logger.LogInformation("User with id {0} registered", user.Id);
 
@@ -102,6 +108,14 @@ namespace CoctailsService.Controllers
             {
                 return BadRequest();
             }
+        }
+
+        [HttpGet("Veryfy/{code}")]
+        public async Task<IActionResult> Veryfie(string code)
+        {
+            await this.userService.Authorize(code);
+
+            return Redirect(@"http://localhost:3000/");
         }
     }
 }

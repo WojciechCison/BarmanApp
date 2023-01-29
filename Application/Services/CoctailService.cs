@@ -20,11 +20,12 @@ namespace Application.Services
             this.ingridientRepository = ingridientRepository;
         }
 
-        public async Task Add(string name, Dictionary<int, double> ingridients)
+        public async Task Add(string name, string description, Dictionary<int, double> ingridients)
         {
             var coctail = new CoctailEntity
             { 
                 Name = name, 
+                Description = description
             };
 
             var createdCoctail = await this.coctailRepository.AddAsync(coctail);

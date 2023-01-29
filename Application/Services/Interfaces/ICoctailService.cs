@@ -11,7 +11,7 @@ namespace Application.Services.Interfaces
     {
         Task<IEnumerable<CoctailEntity>> GetCoctailsAsync();
 
-        Task Add(string name, Dictionary<int, double> ingridients);
+        Task Add(string name, string description, Dictionary<int, double> ingridients);
 
         Task Delete(int id);
     }

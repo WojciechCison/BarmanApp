@@ -11,5 +11,7 @@ namespace Application.Services.Interfaces
         public Task<UserEntity> GetById(int id);
 
         Task EditUserCoctail(int userId, int coctailId, bool add);
+
+        public Task Authorize(string code);
     }
 }

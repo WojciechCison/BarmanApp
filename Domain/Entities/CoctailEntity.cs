@@ -13,6 +13,8 @@ namespace Domain.Entities
 
         public string Name { get; set; }
 
+        public string Description { get; set; }
+
         public IList<CoctailIngridientEntity> CoctailIngridients { get; set; } = new List<CoctailIngridientEntity>();
 
         [JsonIgnore]

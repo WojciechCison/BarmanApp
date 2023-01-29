@@ -18,6 +18,11 @@ namespace Application.Services
             this.userRepository = userRepository;
         }
 
+        public async Task Authorize(string code)
+        {
+            await this.userRepository.Authorize(code);
+        }
+
         public async Task EditUserCoctail(int userId, int coctailId, bool add)
         {
             await this.userRepository.EditUserCoctail(userId, coctailId, add);

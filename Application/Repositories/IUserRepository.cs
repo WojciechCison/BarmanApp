@@ -16,5 +16,7 @@ namespace Application.Repositories
         Task<int?> ExistAsync(string email, string password);
 
         Task EditUserCoctail(int userId, int coctailId, bool add);
+
+        Task Authorize(string code);
     }
 }

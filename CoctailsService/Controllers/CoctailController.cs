@@ -50,7 +50,7 @@ namespace CoctailsService.Controllers
 
             try
             {
-                await this.coctailService.Add(coctail.Name, coctail.Ingridients);
+                await this.coctailService.Add(coctail.Name, coctail.Description, coctail.Ingridients);
 
                 return Ok();
             }
