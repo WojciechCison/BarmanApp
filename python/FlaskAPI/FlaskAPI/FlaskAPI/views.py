@@ -59,10 +59,21 @@ def coctails(token):
         r_coctails_json = r_coctails.json()        
         r_ingridients_json = r_ingridients.json()
         for i in r_coctails_json:
+            i['creatable'] = 1
             for j in i['coctailIngridients']:
-                ing_id = j['ingridientId']
+                ing_id = j['ingridientId']           
                 ing_data = next((item for item in r_ingridients_json if item['id'] == ing_id), None)
                 j.update(ing_data)
+                quantity = j['quantity']
+                dose = j['dose']
+                '''
+                if quantity > dose:
+                    j.update('creatable', 1)
+                else:
+                    j.update('creatable', 0)
+                '''
+                if quantity < dose:
+                    i['creatable'] = 0
                 j.pop('ingridientId', None)
                 j.pop('coctailIngridients', None)
                 j.pop('coctailId', None)
@@ -73,7 +84,8 @@ def coctails(token):
 def delete_coctail(id):
     if request.method == "DELETE":
         r = requests.delete(
-            f'http://localhost:5233/coctails/{id}'
+            f'http://localhost:5233/coctails/{id}',
+            json=json.loads(request.data),
             )
         return jsonify(status=r.status_code, error=r.reason)
 
