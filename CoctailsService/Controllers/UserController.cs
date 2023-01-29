@@ -10,11 +10,13 @@ namespace CoctailsService.Controllers
     [Route("users/")]
     public class UserController : Controller
     {
+        private readonly ILogger<IngridientController> logger;
         private readonly ITokenService tokenService;
         private readonly IUserService userService;
 
-        public UserController(ITokenService tokenService, IUserService userService)
+        public UserController(ILogger<IngridientController> logger, ITokenService tokenService, IUserService userService)
         {
+            this.logger = logger;
             this.tokenService = tokenService;
             this.userService = userService;
         }
@@ -32,6 +34,8 @@ namespace CoctailsService.Controllers
 
             var user = await this.userService.GetById(userId.Value);
             var token = this.tokenService.CreateToken(userId.Value);
+
+            this.logger.LogInformation("User with id {0} log in", userId.Value);
 
             return Ok(new LoginResponse { Token = token, User = user });
         }
@@ -53,6 +57,8 @@ namespace CoctailsService.Controllers
                 return BadRequest();
             }
 
+            this.logger.LogInformation("User with id {0} registered", user.Id);
+
             return Ok();
         }
 
@@ -60,7 +66,7 @@ namespace CoctailsService.Controllers
         [Route("Coctails/{userId}/Add/{coctailId}")]
         public async Task<IActionResult> AddFavoriteCoctail(int userId, int coctailId,[FromBody] string token)
         {
-            if (token == null || !this.tokenService.ValidateToken(token))
+            if (token == null || !this.tokenService.ValidateToken(token, "add new favorite ingridient"))
             {
                 return Unauthorized();
             }
@@ -80,7 +86,7 @@ namespace CoctailsService.Controllers
         [Route("Coctails/{userId}/Remove/{coctailId}")]
         public async Task<IActionResult> RemoveFavoriteCoctail(int userId, int coctailId,[FromBody] string token)
         {
-            if (token == null || !this.tokenService.ValidateToken(token))
+            if (token == null || !this.tokenService.ValidateToken(token, "remove favorite ingridient"))
             {
                 return Unauthorized();
             }
