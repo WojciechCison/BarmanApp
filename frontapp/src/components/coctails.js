@@ -292,6 +292,7 @@ export default class Coctails extends React.Component{
           <StyledTableRow >
             <StyledTableCell>Id</StyledTableCell>
             <StyledTableCell>Coctail name</StyledTableCell>
+            <StyledTableCell>Description</StyledTableCell>
             <StyledTableCell align='right'>Ingridients</StyledTableCell>
           </StyledTableRow >
         </TableHead>
@@ -308,6 +309,9 @@ export default class Coctails extends React.Component{
                 </TableCell>
               <TableCell component="th" scope="row">
                 {el.name}
+              </TableCell>
+              <TableCell component="th" scope="row">
+                descriptions
               </TableCell>
               <TableCell align="right">
               

@@ -1,5 +1,5 @@
 import React from "react";
-import { getToken } from "../services/auth";
+import { getId, getToken } from "../services/auth";
 import axios from "axios";
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -24,6 +24,8 @@ import { coctailsRequest } from '../services/cocktails';
 import { useState } from 'react';
 import { styled } from '@mui/material/styles';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
+import Favorite from '@mui/icons-material/Favorite';
 
 const brake = { margin: '80px 30px' }
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
@@ -108,6 +110,21 @@ export default class Barmanmain extends React.Component{
   componentDidMount(){
     this.coctailsRequest();
   }
+  FavCoctail = (id)  => {
+    const token = getToken();
+    console.log(token)
+    const userId = getId();
+    console.log(userId)
+
+    const data = axios.put(`http://localhost:5555/users/Coctails/${userId}/Add/${id}`,{data:`${token}`} )
+    .then(response => {
+       this.coctailsRequest();
+        return response.data 
+    })
+    .catch(error => {
+        console.log(error);
+    })
+};
   
 
   render() {
@@ -181,19 +198,21 @@ export default class Barmanmain extends React.Component{
                 
                 </Box>
 
-                <Grid padding={brake} sx={{
+                <Grid style={{margin: '20px 0px 0px 30px'}} sx={{
         width: 1380,
         maxWidth: '100%',
       }}>
                 </Grid>
 
-                <TableContainer >
-      <Table sx={{ minWidth: 650 }} aria-label="customized table">
+                <TableContainer TableContainer sx={{maxHeight:"60vh", overflowY:"auto"}} >
+      <Table sx={{ minWidth: 650, maxWidth: '70vw'}} style={{margin: '20px 0px 0px 30px'}} aria-label="customized table" stickyHeader>
         <TableHead>
           <StyledTableRow >
             <StyledTableCell>Id</StyledTableCell>
             <StyledTableCell>Coctail name</StyledTableCell>
+            <StyledTableCell>Description</StyledTableCell>
             <StyledTableCell align='right'>Ingridients</StyledTableCell>
+            
           </StyledTableRow >
         </TableHead>
         <TableBody>
@@ -203,11 +222,14 @@ export default class Barmanmain extends React.Component{
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell component="th" scope="row">
-              <Checkbox {...label}  />
                 {el.id}
+                <Checkbox {...label} onClick={() => this.FavCoctail(el.id)} icon={<FavoriteBorder /> } checkedIcon={<Favorite />} />
                 </TableCell>
               <TableCell component="th" scope="row">
                 {el.name}
+              </TableCell>
+              <TableCell component="th" scope="row">
+                descriptions
               </TableCell>
               <TableCell align="right">
               
