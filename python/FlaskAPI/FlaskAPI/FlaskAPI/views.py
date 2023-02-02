@@ -56,28 +56,32 @@ def coctails(token):
             f'http://localhost:5233/ingridients/{token}',
             #json=json.loads(request.data),
             )
+        r_comments = requests.get(
+            f'http://localhost:5233/Comments/{token}',
+            #json=json.loads(request.data),
+            )
         r_coctails_json = r_coctails.json()        
         r_ingridients_json = r_ingridients.json()
+        r_comments_json = r_comments.json()
         for i in r_coctails_json:
-            i['creatable'] = 1
+            i['creatable'] = 1                      
             for j in i['coctailIngridients']:
                 ing_id = j['ingridientId']           
                 ing_data = next((item for item in r_ingridients_json if item['id'] == ing_id), None)
                 j.update(ing_data)
                 quantity = j['quantity']
                 dose = j['dose']
-                '''
-                if quantity > dose:
-                    j.update('creatable', 1)
-                else:
-                    j.update('creatable', 0)
-                '''
                 if quantity < dose:
                     i['creatable'] = 0
                 j.pop('ingridientId', None)
                 j.pop('coctailIngridients', None)
                 j.pop('coctailId', None)
-                j.pop('storagedIngridientEntity', None)
+                j.pop('storagedIngridientEntity', None)   
+            i['comments'] = [] 
+            for k in r_comments_json:
+                #comment = next((item for item in r_comments_json if item['coctailId'] == i['id']), None)
+                if k['coctailId'] == i['id']:
+                    i['comments'].append(k)
         return r_coctails_json
 
 @app.route('/coctails/<id>', methods=["DELETE"])
@@ -116,6 +120,31 @@ def delete_ingridient(id):
             json=json.loads(request.data),
             )
         return jsonify(status=r.status_code, error=r.reason)
+
+@app.route('/Comments/<token>', methods=["POST"])
+def comment_add(token):
+    if request.method == "POST":
+        r = requests.post(
+            f'http://localhost:5233/Comments/{token}',
+            json=json.loads(request.data),
+            )
+        return jsonify(status=r.status_code, error=r.reason)
+
+@app.route('/Comments/<token>/<commentId>', methods=["DELETE", "PUT"])
+def comment_ed(token, commentId):
+    if request.method == "PUT":
+        r = requests.put(
+            f'http://localhost:5233/Comments/{token}/{commentId}',
+            json=json.loads(request.data),
+            )
+        return jsonify(status=r.status_code, error=r.reason)
+    if request.method == "DELETE":
+        r = requests.delete(
+            f'http://localhost:5233/Comments/{token}/{commentId}',
+            #json=json.loads(request.data),
+            )
+        return jsonify(status=r.status_code, error=r.reason)
+
 
 @app.route('/Storage/<id>/Add/<dose>', methods=["PUT"])
 def add_to_storage(id, dose):
