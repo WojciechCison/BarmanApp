@@ -121,7 +121,7 @@ def delete_ingridient(id):
             )
         return jsonify(status=r.status_code, error=r.reason)
 
-@app.route('/Comments/<token>', methods=["POST"])
+@app.route('/Comments/<token>', methods=["POST", "GET"])
 def comment_add(token):
     if request.method == "POST":
         r = requests.post(
@@ -129,6 +129,14 @@ def comment_add(token):
             json=json.loads(request.data),
             )
         return jsonify(status=r.status_code, error=r.reason)
+    if request.method == "GET":
+        r = requests.get(
+            f'http://localhost:5233/Comments/{token}',
+            #json=json.loads(request.data),
+            )
+        r_json = r.json()
+        return r_json
+
 
 @app.route('/Comments/<token>/<commentId>', methods=["DELETE", "PUT"])
 def comment_ed(token, commentId):
