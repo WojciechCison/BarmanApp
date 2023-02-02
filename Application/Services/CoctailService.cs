@@ -50,14 +50,34 @@ namespace Application.Services
             await this.coctailRepository.EditAsync(createdCoctail);
         }
 
+        public async Task<CommentEntity> AddCommentAsync(CommentEntity comment)
+        {
+           return await this.coctailRepository.AddCommentAsync(comment);
+        }
+
         public async Task Delete(int id)
         {
             await this.coctailRepository.DeleteAsync(id);
         }
 
+        public async  Task DeleteCommentAsync(int id)
+        {
+            await this.coctailRepository.DeleteCommentAsync(id);
+        }
+
+        public async Task EditCommentAsync(CommentEntity comment)
+        {
+            await this.coctailRepository.EditCommentAsync(comment);
+        }
+
         public async Task<IEnumerable<CoctailEntity>> GetCoctailsAsync()
         {
             return await this.coctailRepository.GetCoctailsAsync();
+        }
+
+        public async Task<IEnumerable<CommentEntity>> GetComments()
+        {
+            return await this.coctailRepository.GetComments();
         }
     }
 }

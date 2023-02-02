@@ -11,5 +11,7 @@ namespace CoctailsService.Models
         public string Description { get; set; }
 
         public IEnumerable<IngridientEntity> Ingridients { get; set; }
+
+        public IEnumerable<CommentEntity> Comments { get; set; }
     }
 }

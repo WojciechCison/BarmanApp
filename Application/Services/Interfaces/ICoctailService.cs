@@ -14,5 +14,13 @@ namespace Application.Services.Interfaces
         Task Add(string name, string description, Dictionary<int, double> ingridients);
 
         Task Delete(int id);
+
+        Task<CommentEntity> AddCommentAsync(CommentEntity comment);
+
+        Task EditCommentAsync(CommentEntity comment);
+
+        Task DeleteCommentAsync(int id);
+
+        Task<IEnumerable<CommentEntity>> GetComments();
     }
 }

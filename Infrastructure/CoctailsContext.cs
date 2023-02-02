@@ -26,6 +26,8 @@ namespace Infrastructure
 
         public virtual DbSet<StoragedIngridientEntity> StoragedIngridients { get; set; }
 
+        public virtual DbSet<CommentEntity> Comments { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(System.Reflection.Assembly.GetExecutingAssembly());

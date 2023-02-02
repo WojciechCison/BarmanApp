@@ -53,5 +53,34 @@ namespace Infrastructure.Repositories
 
             return coctails;
         }
+
+        public async Task<IEnumerable<CommentEntity>> GetComments()
+        {
+            return await this.context.Comments.ToListAsync();
+        }
+
+        public async Task<CommentEntity> AddCommentAsync(CommentEntity comment)
+        {
+            this.context.Comments.Add(comment);
+            await this.context.SaveChangesAsync();
+            return comment;
+        }
+
+        public async Task EditCommentAsync(CommentEntity comment)
+        {
+            this.context.Comments.Update(comment);
+            await this.context.SaveChangesAsync();
+        }
+
+        public async Task DeleteCommentAsync(int id)
+        {
+            var comments = this.context.Comments.FirstOrDefault(i => i.Id == id);
+
+            if (comments != null)
+            {
+                this.context.Comments.Remove(comments);
+                await this.context.SaveChangesAsync();
+            }
+        }
     }
 }

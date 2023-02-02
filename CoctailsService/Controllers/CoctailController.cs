@@ -79,5 +79,104 @@ namespace CoctailsService.Controllers
                 return BadRequest();
             }
         }
+
+        [HttpGet]
+        [Route("/Comments/{token}")]
+        public async Task<IActionResult> GEtComments(string token)
+        {
+            if (token == null || !this.tokenService.ValidateToken(token, "Add comment"))
+            {
+                return Unauthorized();
+            }
+
+            try
+            {
+                var comments = await this.coctailService.GetComments();
+
+                return Ok(comments);
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpPost]
+        [Route("/Comments/{token}")]
+        public async Task<IActionResult> AddComment(string token, [FromBody] CommentRequest comment)
+        {
+            if (token == null || !this.tokenService.ValidateToken(token, "Add comment"))
+            {
+                return Unauthorized();
+            }
+
+            try
+            {
+                var com = new CommentEntity
+                {
+                    CoctailId = comment.CoctailId,
+                    UserId = comment.UserId,
+                    Comment = comment.Comment
+                };
+
+                var createdComment = await this.coctailService.AddCommentAsync(com);
+
+                return Ok(createdComment);
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpPut]
+        [Route("/Comments/{token}/{commentId}")]
+        public async Task<IActionResult> EditComment(string token, int commentId, [FromBody] CommentRequest comment)
+        {
+            if (token == null || !this.tokenService.ValidateToken(token, "Edit comment"))
+            {
+                return Unauthorized();
+            }
+
+            try
+            {
+                var com = new CommentEntity
+                {
+                    Id = commentId,
+                    CoctailId = comment.CoctailId,
+                    UserId = comment.UserId,
+                    Comment = comment.Comment
+                };
+
+                await this.coctailService.EditCommentAsync(com);
+
+                return Ok();
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpDelete]
+        [Route("/Comments/{token}/{commentId}")]
+        public async Task<IActionResult> RemoveComment(string token, int commentId)
+        {
+            if (token == null || !this.tokenService.ValidateToken(token, "Delete comment"))
+            {
+                return Unauthorized();
+            }
+
+            try
+            {
+                await this.coctailService.DeleteCommentAsync(commentId);
+
+                return Ok();
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+        }
     }
 }

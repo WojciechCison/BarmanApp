@@ -16,5 +16,13 @@ namespace Application.Repositories
         Task DeleteAsync(int id);
 
         Task EditAsync(CoctailEntity coctail);
+
+        Task<CommentEntity> AddCommentAsync(CommentEntity comment);
+
+        Task EditCommentAsync(CommentEntity comment);
+
+        Task DeleteCommentAsync(int id);
+
+        Task<IEnumerable<CommentEntity>> GetComments();
     }
 }
