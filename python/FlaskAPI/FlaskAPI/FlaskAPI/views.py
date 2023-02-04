@@ -24,6 +24,17 @@ def login():
     else:
         return 'login page'
 
+@app.route('/users/Github', methods=["GET"])
+def login():
+    if request.method == "GET":
+        r = requests.get(
+            'http://localhost:5233/users/Github', 
+            #json=json.loads(request.data),
+            )
+        return jsonify(status=r.status_code, error=r.reason)
+    else:
+        return 'login page'
+
 @app.route('/users/register', methods=["POST", "GET"])
 def register():
     if request.method == "POST":
