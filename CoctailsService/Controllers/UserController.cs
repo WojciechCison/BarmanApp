@@ -3,6 +3,9 @@ using Application.Services.Interfaces;
 using CoctailsService.Models;
 using Domain.Entities;
 using Identity.Models;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CoctailsService.Controllers
@@ -115,6 +118,13 @@ namespace CoctailsService.Controllers
         {
             await this.userService.Authorize(code);
 
+            return Redirect(@"http://localhost:3000/");
+        }
+
+        [Authorize]
+        [HttpGet("Github")]
+        public async Task<IActionResult> Github()
+        {
             return Redirect(@"http://localhost:3000/");
         }
     }
