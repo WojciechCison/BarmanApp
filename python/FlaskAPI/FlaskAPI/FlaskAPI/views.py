@@ -25,7 +25,7 @@ def login():
         return 'login page'
 
 @app.route('/users/Github', methods=["GET"])
-def login():
+def github_login():
     if request.method == "GET":
         r = requests.get(
             'http://localhost:5233/users/Github', 
