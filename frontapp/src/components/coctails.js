@@ -44,6 +44,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     fontSize: 14,
   },
 }));
+
 const handleSubmit = (event) => {
   event.preventDefault();
   const data = new FormData(event.currentTarget);
@@ -311,7 +312,7 @@ export default class Coctails extends React.Component{
                 {el.name}
               </TableCell>
               <TableCell component="th" scope="row">
-                descriptions
+              {el.description}
               </TableCell>
               <TableCell align="right">
               

@@ -107,7 +107,7 @@ export default function SignUp() {
               sx={{ mt: 3, mb: 2 }}
               onSubmit = {handleSubmit}
             >
-              Sign Up
+              <NavLink to="/" style={{textDecoration: 'none'}} >Sign in </NavLink>
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>

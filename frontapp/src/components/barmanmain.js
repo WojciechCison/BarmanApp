@@ -1,5 +1,6 @@
-import React from "react";
-import { getId, getToken } from "../services/auth";
+import React , { useEffect  } from "react";
+
+import { getId, getName, getToken } from "../services/auth";
 import axios from "axios";
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -26,6 +27,10 @@ import { styled } from '@mui/material/styles';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 import Favorite from '@mui/icons-material/Favorite';
+import { getFavoriteCoctailsList } from "../services/auth";
+import PropTypes from 'prop-types';
+import AdSense from 'react-adsense';
+
 
 const brake = { margin: '80px 30px' }
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
@@ -40,6 +45,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     fontSize: 14,
   },
 }));
+
 const handleSubmit = (event) => {
   event.preventDefault();
   const data = new FormData(event.currentTarget);
@@ -87,12 +93,28 @@ const theme = createTheme({
     },
   });
 
+  
 export default class Barmanmain extends React.Component{
   constructor(props){
     super();
     this.state = {}
+    this.checkedlist = JSON.parse(getFavoriteCoctailsList()).map(a => a.coctailId);
+    console.log(this.checkedlist)
+    
   }
 
+  handleFavouriteChange(event){
+    
+    const data = new FormData(event.currentTarget);
+  
+    if(data === 1 ){
+      this.RemoveFavCoctail(this.el.id)
+      this.checkedlist = JSON.parse(getFavoriteCoctailsList()).map(a => a.coctailId);
+    }
+    else{
+    this.FavCoctail((this.el.id))
+    }
+  }
  async coctailsRequest() {
     const token = getToken();
     if(token){
@@ -109,25 +131,38 @@ export default class Barmanmain extends React.Component{
   }
   componentDidMount(){
     this.coctailsRequest();
+
   }
-  FavCoctail = (id)  => {
+  async  FavCoctail (id)  {
     const token = getToken();
     console.log(token)
     const userId = getId();
     console.log(userId)
-
-    const data = axios.put(`http://localhost:5555/users/Coctails/${userId}/Add/${id}`,{data:`${token}`} )
-    .then(response => {
-       this.coctailsRequest();
-        return response.data 
-    })
-    .catch(error => {
-        console.log(error);
-    })
-};
   
+    const response = await axios.put(
+      `http://localhost:5555/users/Coctails/${userId}/Add/${id}`,
+      `${token}` 
+    );
+    return response;
+  } 
+
+  async  RemoveFavCoctail (id)  {
+    const token = getToken();
+    console.log(token)
+    const userId = getId();
+    console.log(userId)
+  
+    const response = await axios.put(
+      `http://localhost:5233/users/Coctails/${userId}/Remove/${id}`,
+      `${token}` 
+    );
+    return response;
+  } 
+
 
   render() {
+
+   
     const drinks = this.state;
     return (
       <div>
@@ -159,6 +194,18 @@ export default class Barmanmain extends React.Component{
 
             </Typography>
             </div>
+                
+          
+          <AdSense.Google
+  client="ca-pub-7181337091431123"
+  slot="7060336981"
+  style={{ display: 'block' }}
+  data-ad-format="auto"
+  data-full-width-responsive="true"
+  data-adtest="on"
+  
+/>
+            
              <ThemeProvider theme={theme}>
              <Button color="neutral" style={{ height: 80, width: 200, marginTop: 10, marginLeft: 120 }} variant="contained" startIcon={<DeckIcon />}>
                 
@@ -223,13 +270,13 @@ export default class Barmanmain extends React.Component{
             >
               <TableCell component="th" scope="row">
                 {el.id}
-                <Checkbox {...label} onClick={() => this.FavCoctail(el.id)} icon={<FavoriteBorder /> } checkedIcon={<Favorite />} />
+                <Checkbox {...label} onChange={() => this.handleFavouriteChange(el.id)} icon={<FavoriteBorder /> } checkedIcon={<Favorite color="secondary" /> } checked={this.checkedlist.includes(el.id)} on />
                 </TableCell>
               <TableCell component="th" scope="row">
                 {el.name}
               </TableCell>
               <TableCell component="th" scope="row">
-                descriptions
+              {el.description}
               </TableCell>
               <TableCell align="right">
               
@@ -246,9 +293,6 @@ export default class Barmanmain extends React.Component{
       </Table>
     </TableContainer>
 
-            
-
-           
       </Grid>
         </Grid>
 

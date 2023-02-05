@@ -1,5 +1,5 @@
 import React from "react";
-import { getToken } from "../services/auth";
+import { getId, getToken } from "../services/auth";
 import axios from "axios";
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -24,9 +24,29 @@ import { coctailsRequest } from '../services/cocktails';
 import { useState } from 'react';
 import { styled } from '@mui/material/styles';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
+import Favorite from '@mui/icons-material/Favorite';
+import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+
+import Modal from '@mui/material/Modal';
+import TextField from '@mui/material/TextField';
 
 const brake = { margin: '80px 30px' }
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
+
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -87,31 +107,158 @@ const theme = createTheme({
 
 export default class User extends React.Component{
   constructor(props){
-    super();
-    this.state = {}
+    super(props);
+    this.state = {
+      coctailsData: [],
+      commentsData: [],
+      open: false,
+      open2: false
+    }
   }
+
+  handleOpen = (event) => {
+    console.log("odpaliles komentarz dla " + event.currentTarget.id)
+    this.setState({ open: true, currentCommentId: event.currentTarget.id });
+
+  };
+
+  handleEdit = (event) => {
+  
+    this.setState({ open2: true });
+
+  };
+
+  EditHandleClose = (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const addNewCommentData2 = {
+      comment: data.get("comment"),
+      userId: getId(),
+      coctailId:this.state.currentCommentId
+
+    }
+    this.EditComment(addNewCommentData2);
+    this.setState({ open2: false });
+    this.coctailsRequest();
+  };
+
+
+  handleClose = (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const addNewCommentData = {
+      comment: data.get("comment"),
+      userId: getId(),
+      coctailId:this.state.currentCommentId
+
+    }
+    this.CreateComment(addNewCommentData);
+    this.setState({ open: false });
+    this.coctailsRequest();
+  };
+
+  CreateComment  = (Commentdata) => {
+  const token = getToken();
+  console.log(Commentdata)
+  axios.post(`http://localhost:5555/Comments/${token}`, Commentdata)
+  
+    .then(response => {
+      this.CommentsRequest();
+      console.log(response)
+   })
+  .catch(error => {
+      console.log(error);
+  })
+  
+}
+
+DeleteComment = (id)  => {
+  const token = getToken();
+  console.log(id);
+  const data = axios.delete(`http://localhost:5555/Comments/${token}/${id}`)
+  .then(response => {
+    this.CommentsRequest();
+      return response.data 
+  })
+  .catch(error => {
+      console.log(error);
+  })
+};
+
+EditComment = (id,Commentdata2)  => {
+  this.setState({ open2: true });
+  const token = getToken();
+  console.log(Commentdata2)
+  console.log(id);
+  const data = axios.put(`http://localhost:5555/Comments/${token}/${id}`, Commentdata2)
+
+  return data;
+};
 
  async coctailsRequest() {
     const token = getToken();
     if(token){
-        const data = await axios.get(`http://localhost:5555/coctails/${token}`)
+        const coctailsData = await axios.get(`http://localhost:5555/coctails/${token}`)
         .then(response => {
             return response.data 
         })
         .catch(error => {
             console.log(error);
         })
-        this.setState({data: data})
-        return data
+        this.setState({coctailsData})
+       return coctailsData
     }
   }
+
+   CommentsRequest() {
+    const token = getToken();
+    if(token){
+        const data =  axios.get(`http://localhost:5555/Comments/${token}`)
+        .then(response => {
+          
+          this.setState({ commentsData: response.data });
+            
+        })
+        .catch(error => {
+            console.log(error);
+        })
+        
+        return data
+       
+    }
+  }
+
+  CommentsPost() {
+    const token = getToken();
+    if(token){
+        const data =  axios.post(`http://localhost:5555/Comments/${token}`)
+        .then(response => {
+          
+          this.setState({ commentsData: response.data });
+            
+        })
+        .catch(error => {
+            console.log(error);
+        })
+        
+        return data
+       
+    }
+  }
+
+
   componentDidMount(){
     this.coctailsRequest();
+    this.CommentsRequest()
   }
   
 
   render() {
-    const drinks = this.state;
+    const drinks = this.state.coctailsData;
+    const comments = this.state.commentsData;
+    console.log(this.state.coctailsData)
+    console.log(this.state.commentsData)
+    
     return (
       <div>
       <Grid container component="main" sx={{ height: '100vh' }}>
@@ -183,10 +330,146 @@ export default class User extends React.Component{
                 
                 </Box>
 
-                <Grid padding={brake} sx={{
+                <Grid style={{margin: '20px 0px 0px 30px'}}  sx={{
         width: 1380,
         maxWidth: '100%',
       }}>
+      <TableContainer TableContainer sx={{maxHeight:"60vh", overflowY:"auto"}} >
+      <Table sx={{ minWidth: 650, maxWidth: '70vw'}} style={{margin: '20px 0px 0px 30px'}} aria-label="customized table" stickyHeader>
+        <TableHead>
+          <StyledTableRow >
+            <StyledTableCell>Id</StyledTableCell>
+            <StyledTableCell>Coctail name</StyledTableCell>
+            <StyledTableCell>Description</StyledTableCell>
+            
+            <StyledTableCell align="right">Comments</StyledTableCell>
+            <StyledTableCell ></StyledTableCell>
+            
+          </StyledTableRow >
+        </TableHead>
+        <TableBody>
+          {drinks?.map((el) => (
+            <StyledTableRow 
+              key={el.id}
+              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+            >
+              <TableCell component="th" scope="row">
+                {el.id}
+              
+                </TableCell>
+              <TableCell component="th" scope="row">
+                {el.name}
+              </TableCell>
+              <TableCell component="th" scope="row">
+                {el.description}
+              </TableCell>
+
+              <TableCell align="right" >
+              
+              <div>{comments?.map((test) => {
+                if(el.id === test.coctailId)
+            return(<div>
+            {test.comment}
+            <Button startIcon={<DeleteIcon color="action" onClick={() => this.DeleteComment(test.id)}  />} >  </Button>
+            <Button startIcon={<EditIcon  color="action" id={test.id} onClick={() => this.EditComment(test.id)}/>} >  </Button>
+            
+            <Modal
+          open={this.state.open2}
+          onClose={this.EditHandleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style}>
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+              Edit Comment 
+            </Typography>
+            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            Change your thoughts
+            </Typography>
+            <Box component="form" noValidate onSubmit={this.EditHandleClose} sx={{ mt: 3 }}>
+            <Grid container spacing={2}>
+              <Grid item xs={25} sm={10}>
+                <TextField
+          
+                  name="comment"
+                  required
+                  fullWidth
+                  id="comment"
+                  label="Comment"
+                  autoFocus
+                />
+              </Grid>
+
+            </Grid>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+              onSubmit={this.EditHandleClose}
+            >
+              Edit Comment
+            </Button>
+          </Box>
+          </Box>
+            </Modal>
+            
+            </div>)
+            
+          })}
+          </div>
+              </TableCell>
+              <TableCell align="right">
+              <Button  id={el.id} onClick={this.handleOpen} startIcon={<AddIcon /> }> </Button>
+              <Modal
+          open={this.state.open}
+          onClose={this.handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style}>
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+              Add new Comment 
+            </Typography>
+            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+              What do you think ?
+            </Typography>
+            <Box component="form" noValidate onSubmit={this.handleClose} sx={{ mt: 3 }}>
+            <Grid container spacing={2}>
+              <Grid item xs={25} sm={10}>
+                <TextField
+          
+                  name="comment"
+                  required
+                  fullWidth
+                  id="comment"
+                  label="Comment"
+                  autoFocus
+                />
+              </Grid>
+
+            </Grid>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+              onSubmit={this.handleClose}
+            >
+              Add New Comment
+            </Button>
+          </Box>
+          </Box>
+            </Modal>
+              </TableCell>
+
+
+
+            </StyledTableRow >
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
                 </Grid>
   
       </Grid>

@@ -16,6 +16,8 @@ import { margin } from '@mui/system';
 import axios from 'axios';
 import { NavLink, Navigate, useNavigate } from 'react-router-dom';
 import { loginRequest, getToken } from '../services/auth';
+import { loginGitHub } from '../services/auth';
+import { GithubLoginButton } from "react-social-login-buttons";
 
 
 const theme = createTheme();
@@ -109,14 +111,17 @@ export default function SignInSide() {
               
                 Sign In
               </Button>
-
-
+              <GithubLoginButton onClick={loginGitHub} />
+                
+              
 
               <div style={{textAlign:'right'}}>
 
                 <Button>
                 <NavLink to="signup" style={{textDecoration: 'none'}} align = 'right' > Don't have an account ? Sign Up </NavLink>
                 </Button>
+
+
 
 
 
