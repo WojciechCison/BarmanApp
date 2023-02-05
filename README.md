@@ -49,6 +49,7 @@ edit **appsetings.json** file and configure it by changing connection string, us
   ```
 
 Then using visual stuido open **CoctailService.csproj** file and run CoctailService project.
+
 After that run **FaslApi.sln** project form folder
 >python
 
