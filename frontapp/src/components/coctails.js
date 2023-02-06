@@ -1,5 +1,5 @@
 import React from "react";
-import { getToken } from "../services/auth";
+import { getAdmin, getToken } from "../services/auth";
 import axios from "axios";
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -152,6 +152,7 @@ export default class Coctails extends React.Component{
 
   render() {
 
+    const isAdmin = getAdmin();
     const drinks = this.state;
     return (
       <div>
@@ -219,10 +220,14 @@ export default class Coctails extends React.Component{
                 </NavLink>}
 
                 <div> 
-                  
+                <div>
+             {isAdmin === "true" ? ( 
                 <Button variant="outlined" style={{ height: 60, width: 200, marginBottom: 0,  marginTop: 80, marginLeft: 30 }} color="primary" onClick={this.handleOpen} startIcon={<AddIcon /> }> 
                   Add New Coctail
                 </Button>
+
+              ) : null}
+              </div>
                 <Modal
           open={this.state.open}
           onClose={this.handleClose}
@@ -306,7 +311,13 @@ export default class Coctails extends React.Component{
               <TableCell component="th" scope="row">
               
                 {el.id}
+                <div>
+                {isAdmin === "true" ? ( 
+
                 <Button onClick={() => this.DeleteCoctail(el.id)}  startIcon={<DeleteIcon color="action" />} >  </Button>
+
+                ) : null}
+                </div>
                 </TableCell>
               <TableCell component="th" scope="row">
                 {el.name}

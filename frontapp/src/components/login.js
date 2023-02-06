@@ -31,7 +31,7 @@ export default function SignInSide() {
       email: data.get('email'),
       password: data.get('password'),
     };
-    console.log(loginData);
+    
     await loginRequest(loginData)
     if(getToken()){
       navigate("/barmanmain");

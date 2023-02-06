@@ -1,5 +1,5 @@
 import React from "react";
-import { getToken } from "../services/auth";
+import { getAdmin, getToken } from "../services/auth";
 import axios from "axios";
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -30,6 +30,7 @@ import TextField from '@mui/material/TextField';
 import RemoveIcon from '@mui/icons-material/Remove';
 import TablePagination from '@mui/material/TablePagination';
 import DeleteIcon from '@mui/icons-material/Delete';
+
 
 const brake = { margin: '80px 30px' }
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
@@ -134,6 +135,7 @@ export default class Ingredients extends React.Component{
     this.CreateIngridient(addNewIngridientData);
     this.setState({ open: false });
   };
+
  async ingridientsRequest() {
     const token = getToken();
     if(token){
@@ -147,10 +149,12 @@ export default class Ingredients extends React.Component{
             console.log(error);
         })
         this.setState({data: data})
-        return data
+        
+        
        
     }
   }
+  
    DeleteIngridient = (id)  => {
     const token = getToken();
     console.log(token)
@@ -185,8 +189,9 @@ CreateIngridient  = (Ingridientdata) => {
 
 
   render() {
-    
+    const isAdmin = getAdmin();
     const ingridients = this.state;
+    
     return (
       <div>
       <Grid container component="main" sx={{ height: '100vh' }} >
@@ -256,9 +261,15 @@ CreateIngridient  = (Ingridientdata) => {
               
                 <div> 
                   
+                <div>
+             {isAdmin === "true" ? (
                 <Button variant="outlined" style={{ height: 60, width: 230, marginBottom: 0,  marginTop: 80, marginLeft: 30 }} color="primary" onClick={this.handleOpen} startIcon={<AddIcon /> }> 
                   Add New Ingridient
                 </Button>
+                ) : null}
+               </div>
+
+
         <Modal
           open={this.state.open}
           onClose={this.handleClose}
@@ -340,7 +351,11 @@ CreateIngridient  = (Ingridientdata) => {
             >
               <TableCell component="th" scope="row" >
                 {el.id}
+                <div>
+             {isAdmin === "true" ? (
                 <Button onClick={() => this.DeleteIngridient(el.id)}  startIcon={<DeleteIcon color="action" />} >  </Button>
+                ) : null}
+                </div>
                 </TableCell>
               <TableCell component="th" scope="row">
                 {el.name}

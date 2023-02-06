@@ -1,6 +1,5 @@
-import React , { useEffect  } from "react";
-
-import { getId, getName, getToken } from "../services/auth";
+import React  from "react";
+import { getAdmin, getId, getName, getToken } from "../services/auth";
 import axios from "axios";
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -35,7 +34,7 @@ import AdSense from 'react-adsense';
 const brake = { margin: '80px 30px' }
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
-
+const isAdmin = getAdmin();
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: '#6B4D37',
@@ -94,18 +93,19 @@ const theme = createTheme({
   });
 
   
+  
 export default class Barmanmain extends React.Component{
   constructor(props){
     super();
     this.state = {}
     this.checkedlist = JSON.parse(getFavoriteCoctailsList()).map(a => a.coctailId);
-    console.log(this.checkedlist)
+    
     
   }
 
-  handleFavouriteChange(event){
+  handleFavouriteChange(id){
     
-    const data = new FormData(event.currentTarget);
+    const data = new FormData(id.currentTarget);
   
     if(data === 1 ){
       this.RemoveFavCoctail(this.el.id)
@@ -115,6 +115,7 @@ export default class Barmanmain extends React.Component{
     this.FavCoctail((this.el.id))
     }
   }
+
  async coctailsRequest() {
     const token = getToken();
     if(token){
@@ -158,12 +159,13 @@ export default class Barmanmain extends React.Component{
     );
     return response;
   } 
-
+ 
 
   render() {
 
-   
+    const isAdmin = getAdmin();
     const drinks = this.state;
+    console.log(isAdmin)
     return (
       <div>
       <Grid container component="main" sx={{ height: '100vh' }}>
@@ -270,7 +272,13 @@ export default class Barmanmain extends React.Component{
             >
               <TableCell component="th" scope="row">
                 {el.id}
-                <Checkbox {...label} onChange={() => this.handleFavouriteChange(el.id)} icon={<FavoriteBorder /> } checkedIcon={<Favorite color="secondary" /> } checked={this.checkedlist.includes(el.id)} on />
+                
+                <div>
+             {isAdmin === "false" ? (
+             <Checkbox {...label} onChange={() => this.handleFavouriteChange(el.id)} icon={<FavoriteBorder /> } checkedIcon={<Favorite color="secondary" /> } checked={this.checkedlist.includes(el.id)} on />
+              ) : null}
+              </div>
+
                 </TableCell>
               <TableCell component="th" scope="row">
                 {el.name}

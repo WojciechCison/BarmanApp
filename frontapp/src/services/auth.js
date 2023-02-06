@@ -15,6 +15,10 @@ export const getName = () => {
     return window.localStorage.getItem("name");
 }
 
+export const getAdmin = () => {
+    return window.localStorage.getItem("isAdmin");
+}
+
 export const loginRequest = async (loginData) => {
     
     await axios.post("http://localhost:5555/users/login", loginData)
@@ -23,6 +27,7 @@ export const loginRequest = async (loginData) => {
         window.localStorage.setItem("userId", response.data.token.userId);
         window.localStorage.setItem("name", response.data.user.name);
         window.localStorage.setItem("favoriteCoctailsList", JSON.stringify(response.data.user.favoriteCoctailsList));
+        window.localStorage.setItem("isAdmin", response.data.user.isAdmin);
      })
     .catch(error => {
         console.log(error);
