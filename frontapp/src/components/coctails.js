@@ -33,7 +33,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 import Favorite from '@mui/icons-material/Favorite';
 import StarIcon from '@mui/icons-material/Star';
-
+import AdSense from 'react-adsense';
 
 
 const brake = { margin: '80px 30px' }
@@ -387,13 +387,23 @@ async  RemoveFavCoctail (id)  {
         </TableBody>
       </Table>
     </TableContainer>
-
+          
             
 
            
       </Grid>
         </Grid>
-
+<div> 
+<AdSense.Google
+  client="ca-pub-7181337091431123"
+  slot="7060336981"
+  style={{ display: 'block' }}
+  data-ad-format="auto"
+  data-full-width-responsive="true"
+  data-adtest="on"
+  
+/>
+</div>
       </div>
 
       
