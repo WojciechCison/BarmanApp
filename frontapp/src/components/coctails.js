@@ -1,5 +1,5 @@
 import React from "react";
-import { getAdmin, getToken } from "../services/auth";
+import { getAdmin, getToken, getId, removeFavoriteCoctail } from "../services/auth";
 import axios from "axios";
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -23,12 +23,17 @@ import TableRow from '@mui/material/TableRow';
 import { coctailsRequest } from '../services/cocktails';
 import { useState } from 'react';
 import { styled } from '@mui/material/styles';
+import { getFavoriteCoctailsList } from "../services/auth";
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import Modal from '@mui/material/Modal';
 import AddIcon from '@mui/icons-material/Add';
 import TextField from '@mui/material/TextField';
 import RemoveIcon from '@mui/icons-material/Remove';
 import DeleteIcon from '@mui/icons-material/Delete';
+import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
+import Favorite from '@mui/icons-material/Favorite';
+import StarIcon from '@mui/icons-material/Star';
+
 
 
 const brake = { margin: '80px 30px' }
@@ -52,7 +57,7 @@ const handleSubmit = (event) => {
     email: data.get('email'),
     password: data.get('password'),
   };
-  console.log(loginData);
+
   
 };
 
@@ -108,6 +113,20 @@ export default class Coctails extends React.Component{
   constructor(props){
     super(props);
     this.state = { open: false };
+    this.checkedlist = JSON.parse(getFavoriteCoctailsList()).map(a => a.coctailId);
+  }
+
+  handleFavouriteChange(id){
+    
+    const data = new FormData(id.currentTarget);
+  
+    if(data === 1 ){
+      this.RemoveFavCoctail(this.el.id)
+      this.checkedlist = JSON.parse(getFavoriteCoctailsList()).map(a => a.coctailId);
+    }
+    else{
+    this.FavCoctail((this.el.id))
+    }
   }
   
   handleOpen = () => {
@@ -137,9 +156,10 @@ export default class Coctails extends React.Component{
   }
   DeleteCoctail = (id)  => {
     const token = getToken();
-    console.log(token)
+    
     const data = axios.delete(`http://localhost:5555/coctails/${id}`,{data:`"${token}"`} )
     .then(response => {
+      
        this.coctailsRequest();
         return response.data 
     })
@@ -147,6 +167,26 @@ export default class Coctails extends React.Component{
         console.log(error);
     })
 };
+
+async  RemoveFavCoctail (id)  {
+  const config = { headers: {'Content-Type': 'application/json'} };
+  const token = getToken();
+  // console.log(token)
+  const userId = getId();
+  // console.log(userId)
+
+  const data = await axios.put(`http://localhost:5555/users/Coctails/${userId}/Remove/${id}`, JSON.stringify(token),config)
+  .then(response => {
+    removeFavoriteCoctail(id);
+    this.coctailsRequest();
+      return response.data 
+  })
+  .catch(error => {
+      console.log(error);
+  })
+} 
+
+
   
   
 
@@ -154,6 +194,7 @@ export default class Coctails extends React.Component{
 
     const isAdmin = getAdmin();
     const drinks = this.state;
+    const display = getFavoriteCoctailsList();
     return (
       <div>
       <Grid container component="main" sx={{ height: '100vh' }}>
@@ -185,15 +226,11 @@ export default class Coctails extends React.Component{
             </Typography>
             </div>
              <ThemeProvider theme={theme}>
-             { <NavLink to="/barmanmain" style={{textDecoration: 'none'}} >
-             <Button color="neutral" style={{ height: 80, width: 200, marginTop: 10, marginLeft: 120 }} variant="contained" startIcon={<DeckIcon />}>
-                Main Page
-                </Button>
-                </NavLink> }
+
 
                 { <NavLink to="/coctails" style={{textDecoration: 'none'}} >
-                <Button color="neutral" style={{ height: 80, width: 200, marginTop: 10, marginLeft: 30 }} variant="contained" startIcon={<LocalBarIcon />}>
-                 Coctails  
+                <Button color="neutral" style={{ height: 80, width: 200, marginTop: 10, marginLeft: 250 }} variant="contained" startIcon={<StarIcon  />}>
+                Favourites  
                 </Button>
                 </NavLink> }
 
@@ -206,8 +243,8 @@ export default class Coctails extends React.Component{
 
 
                 { <NavLink to="/user" style={{textDecoration: 'none'}} >
-                <Button color="neutral" style={{ height: 80, width: 200, marginTop: 10, marginLeft: 30 }} variant="contained" startIcon={<AccountCircleIcon />}>
-                User
+                <Button color="neutral" style={{ height: 80, width: 200, marginTop: 10, marginLeft: 30 }} variant="contained" startIcon={<LocalBarIcon />}>
+                Coctails
                 </Button>
                 </NavLink> }
 
@@ -240,6 +277,7 @@ export default class Coctails extends React.Component{
             </Typography>
             <Typography id="modal-modal-description" sx={{ mt: 2 }}>
               Fill in all required informations
+              
             </Typography>
             <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
@@ -270,11 +308,12 @@ export default class Coctails extends React.Component{
             <Button
               type="submit"
               fullWidth
+              disabled="true"
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
               onSubmit = {handleSubmit}
             >
-              Create New Coctail
+              //Create New Coctail//    Development in progress
             </Button>
           </Box>
           </Box>
@@ -292,7 +331,7 @@ export default class Coctails extends React.Component{
       }}>
                 </Grid>
 
-                <TableContainer sx={{maxHeight:"60vh", overflowY:"auto"}} >
+       <TableContainer TableContainer sx={{maxHeight:"60vh", overflowY:"auto"}} >
       <Table sx={{ minWidth: 650, maxWidth: '70vw'}} style={{margin: '20px 0px 0px 30px'}} aria-label="customized table" stickyHeader>
         <TableHead>
           <StyledTableRow >
@@ -303,7 +342,13 @@ export default class Coctails extends React.Component{
           </StyledTableRow >
         </TableHead>
         <TableBody>
-          {drinks?.data?.map((el) => (
+          {
+          drinks?.data?.filter((a) => {
+            return JSON.parse(display).find((b) => 
+            {
+             return a.id == b.coctailId
+            })
+          }).map((el) => (
             <StyledTableRow 
               key={el.id}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -311,6 +356,9 @@ export default class Coctails extends React.Component{
               <TableCell component="th" scope="row">
               
                 {el.id}
+
+                <Button startIcon={<Favorite color="primary" onClick={() => this.RemoveFavCoctail(el.id)}  />} >  </Button>
+
                 <div>
                 {isAdmin === "true" ? ( 
 

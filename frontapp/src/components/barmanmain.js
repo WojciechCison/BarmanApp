@@ -136,9 +136,9 @@ export default class Barmanmain extends React.Component{
   }
   async  FavCoctail (id)  {
     const token = getToken();
-    console.log(token)
+    // console.log(token)
     const userId = getId();
-    console.log(userId)
+    // console.log(userId)
   
     const response = await axios.put(
       `http://localhost:5555/users/Coctails/${userId}/Add/${id}`,
@@ -149,9 +149,9 @@ export default class Barmanmain extends React.Component{
 
   async  RemoveFavCoctail (id)  {
     const token = getToken();
-    console.log(token)
+    // console.log(token)
     const userId = getId();
-    console.log(userId)
+    // console.log(userId)
   
     const response = await axios.put(
       `http://localhost:5233/users/Coctails/${userId}/Remove/${id}`,
@@ -165,7 +165,7 @@ export default class Barmanmain extends React.Component{
 
     const isAdmin = getAdmin();
     const drinks = this.state;
-    console.log(isAdmin)
+    // console.log(isAdmin)
     return (
       <div>
       <Grid container component="main" sx={{ height: '100vh' }}>

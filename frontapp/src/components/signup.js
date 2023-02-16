@@ -30,10 +30,10 @@ export default function SignUp() {
       password: data.get('password'),
     };
     signupRequest(signupData)
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    // console.log({
+    //   email: data.get('email'),
+    //   password: data.get('password'),
+    // });
   };
 
   return (

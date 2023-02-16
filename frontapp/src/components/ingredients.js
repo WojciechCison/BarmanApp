@@ -30,6 +30,7 @@ import TextField from '@mui/material/TextField';
 import RemoveIcon from '@mui/icons-material/Remove';
 import TablePagination from '@mui/material/TablePagination';
 import DeleteIcon from '@mui/icons-material/Delete';
+import StarIcon from '@mui/icons-material/Star';
 
 
 const brake = { margin: '80px 30px' }
@@ -120,10 +121,15 @@ export default class Ingredients extends React.Component{
     this.setState({ open: true });
   };
 
+  handleClose2 = () => {
+    this.setState({ open: false });
+  };
+
   handleChange(event) {
     this.setState({ checked: event.target.checked });
     console.log(event)
     }
+
 
   handleClose = (event) => {
     event.preventDefault();
@@ -223,15 +229,10 @@ CreateIngridient  = (Ingridientdata) => {
             </Typography>
             </div>
              <ThemeProvider theme={theme}>
-             { <NavLink to="/barmanmain" style={{textDecoration: 'none'}} >
-             <Button color="neutral" style={{ height: 80, width: 200, marginTop: 10, marginLeft: 120 }} variant="contained" startIcon={<DeckIcon />}>
-                Main Page
-                </Button>
-                </NavLink> }
 
                 { <NavLink to="/coctails" style={{textDecoration: 'none'}} >
-                <Button color="neutral" style={{ height: 80, width: 200, marginTop: 10, marginLeft: 30 }} variant="contained" startIcon={<LocalBarIcon />}>
-                 Coctails  
+                <Button color="neutral" style={{ height: 80, width: 200, marginTop: 10, marginLeft: 250 }} variant="contained" startIcon={<StarIcon  />}>
+                Favourites  
                 </Button>
                 </NavLink> }
 
@@ -246,8 +247,8 @@ CreateIngridient  = (Ingridientdata) => {
 
 
                 { <NavLink to="/user" style={{textDecoration: 'none'}} >
-                <Button color="neutral" style={{ height: 80, width: 200, marginTop: 10, marginLeft: 30 }} variant="contained" startIcon={<AccountCircleIcon />}>
-                User
+                <Button color="neutral" style={{ height: 80, width: 200, marginTop: 10, marginLeft: 30 }} variant="contained" startIcon={<LocalBarIcon />}>
+                Coctails
                 </Button>
                 </NavLink> }
 
@@ -272,7 +273,7 @@ CreateIngridient  = (Ingridientdata) => {
 
         <Modal
           open={this.state.open}
-          onClose={this.handleClose}
+          onClose={this.handleClose2}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
@@ -287,7 +288,7 @@ CreateIngridient  = (Ingridientdata) => {
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
-          
+                  required
                   name="name"
                   required
                   fullWidth

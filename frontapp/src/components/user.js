@@ -1,5 +1,5 @@
 import React from "react";
-import { getId, getToken } from "../services/auth";
+import { getAdmin, getId, getToken, updateFavoriteCoctailsList } from "../services/auth";
 import axios from "axios";
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -29,9 +29,13 @@ import Favorite from '@mui/icons-material/Favorite';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-
+import StarIcon from '@mui/icons-material/Star';
 import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
+import Alert from '@mui/material/Alert';
+import Stack from '@mui/material/Stack';
+
+import { getFavoriteCoctailsList } from "../services/auth";
 
 const brake = { margin: '80px 30px' }
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
@@ -65,7 +69,7 @@ const handleSubmit = (event) => {
     email: data.get('email'),
     password: data.get('password'),
   };
-  console.log(loginData);
+  // console.log(loginData);
   
 };
 
@@ -114,10 +118,58 @@ export default class User extends React.Component{
       open: false,
       open2: false
     }
+    this.checkedlist = JSON.parse(getFavoriteCoctailsList()).map(a => a.coctailId);
   }
 
+  handleFavouriteChange(id){
+    
+    const data = new FormData(id.currentTarget);
+  
+    if(data === 1 ){
+      this.RemoveFavCoctail(this.el.id)
+      this.checkedlist = JSON.parse(getFavoriteCoctailsList()).map(a => a.coctailId);
+    }
+    else{
+    this.FavCoctail((this.el.id))
+    }
+  }
+
+  async  RemoveFavCoctail (id)  {
+    const config = { headers: {'Content-Type': 'application/json'} };
+    const token = getToken();
+    // console.log(token)
+    const userId = getId();
+    // console.log(userId)
+
+    const data = await axios.put(`http://localhost:5233/users/Coctails/${userId}/Remove/${id}`, config)
+    .then(response => {
+      
+        return response.data 
+    })
+    .catch(error => {
+        console.log(error);
+    })
+  } 
+
+  async FavCoctail (id)  {
+    const config = { headers: {'Content-Type': 'application/json'} };
+    const token = getToken()
+    
+    const userId = getId()
+    
+
+    const data = await axios.put(`http://localhost:5555/users/Coctails/${userId}/Add/${id}`, JSON.stringify(token),config )
+    .then(response => {
+      updateFavoriteCoctailsList(id);
+        return response.data 
+    })
+    .catch(error => {
+        console.log(error);
+    })
+  } 
+
   handleOpen = (event) => {
-    console.log("odpaliles komentarz dla " + event.currentTarget.id)
+    // console.log("odpaliles komentarz dla " + event.currentTarget.id)
     this.setState({ open: true, currentCommentId: event.currentTarget.id });
 
   };
@@ -159,12 +211,12 @@ export default class User extends React.Component{
 
   CreateComment  = (Commentdata) => {
   const token = getToken();
-  console.log(Commentdata)
+  
   axios.post(`http://localhost:5555/Comments/${token}`, Commentdata)
   
     .then(response => {
       this.CommentsRequest();
-      console.log(response)
+      // console.log(response)
    })
   .catch(error => {
       console.log(error);
@@ -174,7 +226,7 @@ export default class User extends React.Component{
 
 DeleteComment = (id)  => {
   const token = getToken();
-  console.log(id);
+  
   const data = axios.delete(`http://localhost:5555/Comments/${token}/${id}`)
   .then(response => {
     this.CommentsRequest();
@@ -188,8 +240,7 @@ DeleteComment = (id)  => {
 EditComment = (id,Commentdata2)  => {
   this.setState({ open2: true });
   const token = getToken();
-  console.log(Commentdata2)
-  console.log(id);
+
   const data = axios.put(`http://localhost:5555/Comments/${token}/${id}`, Commentdata2)
 
   return data;
@@ -256,9 +307,10 @@ EditComment = (id,Commentdata2)  => {
   render() {
     const drinks = this.state.coctailsData;
     const comments = this.state.commentsData;
-    console.log(this.state.coctailsData)
-    console.log(this.state.commentsData)
-    
+    const useriddelete = getId();
+    const isAdmin = getAdmin();
+    // console.log(this.state.coctailsData)
+
     return (
       <div>
       <Grid container component="main" sx={{ height: '100vh' }}>
@@ -273,8 +325,8 @@ EditComment = (id,Commentdata2)  => {
             backgroundRepeat: 'no-repeat',
             backgroundColor: (t) =>
               t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
+              backgroundPosition: 'center',
+              height: '100%'
           }}
         />
 
@@ -290,15 +342,11 @@ EditComment = (id,Commentdata2)  => {
             </Typography>
             </div>
              <ThemeProvider theme={theme}>
-             { <NavLink to="/barmanmain" style={{textDecoration: 'none'}} >
-             <Button color="neutral" style={{ height: 80, width: 200, marginTop: 10, marginLeft: 120 }} variant="contained" startIcon={<DeckIcon />}>
-                Main Page
-                </Button>
-                </NavLink> }
+
 
                 { <NavLink to="/coctails" style={{textDecoration: 'none'}} >
-                <Button color="neutral" style={{ height: 80, width: 200, marginTop: 10, marginLeft: 30 }} variant="contained" startIcon={<LocalBarIcon />}>
-                 Coctails  
+                <Button color="neutral" style={{ height: 80, width: 200, marginTop: 10, marginLeft: 250 }} variant="contained" startIcon={<StarIcon  />}>
+                Favourites  
                 </Button>
                 </NavLink> }
 
@@ -313,8 +361,8 @@ EditComment = (id,Commentdata2)  => {
 
 
                 { <NavLink to="/user" style={{textDecoration: 'none'}} >
-                <Button color="neutral" style={{ height: 80, width: 200, marginTop: 10, marginLeft: 30 }} variant="contained" startIcon={<AccountCircleIcon />}>
-                User
+                <Button color="neutral" style={{ height: 80, width: 200, marginTop: 10, marginLeft: 30 }} variant="contained" startIcon={<LocalBarIcon />}>
+                Coctails
                 </Button>
                 </NavLink> }
 
@@ -332,7 +380,7 @@ EditComment = (id,Commentdata2)  => {
 
                 <Grid style={{margin: '20px 0px 0px 30px'}}  sx={{
         width: 1380,
-        maxWidth: '100%',
+        
       }}>
       <TableContainer TableContainer sx={{maxHeight:"60vh", overflowY:"auto"}} >
       <Table sx={{ minWidth: 650, maxWidth: '70vw'}} style={{margin: '20px 0px 0px 30px'}} aria-label="customized table" stickyHeader>
@@ -355,6 +403,9 @@ EditComment = (id,Commentdata2)  => {
             >
               <TableCell component="th" scope="row">
                 {el.id}
+
+             <Button startIcon={<Favorite color="secondary" onClick={() => this.FavCoctail(el.id)}  />} >  </Button>
+
               
                 </TableCell>
               <TableCell component="th" scope="row">
@@ -370,8 +421,15 @@ EditComment = (id,Commentdata2)  => {
                 if(el.id === test.coctailId)
             return(<div>
             {test.comment}
-            <Button startIcon={<DeleteIcon color="action" onClick={() => this.DeleteComment(test.id)}  />} >  </Button>
-            <Button startIcon={<EditIcon  color="action" id={test.id} onClick={() => this.EditComment(test.id)}/>} >  </Button>
+            {useriddelete === String(test.userId) && isAdmin === "false" ? (
+              <Button startIcon={<DeleteIcon color="action" onClick={() => this.DeleteComment(test.id)}  />} >  </Button>
+              ) : null}
+            {isAdmin === "true" ? (
+             <Button startIcon={<DeleteIcon color="action" onClick={() => this.DeleteComment(test.id)}  />} >  </Button>
+              ) : null}
+            
+            
+            {/* <Button startIcon={<EditIcon  color="action" id={test.id} onClick={() => this.EditComment(test.id)}/>} >  </Button> */}
             
             <Modal
           open={this.state.open2}

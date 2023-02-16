@@ -1,4 +1,7 @@
 import axios from 'axios';
+import { useState } from 'react';
+
+
 export const getToken = () => {
     return window.localStorage.getItem("token");
 }
@@ -18,9 +21,22 @@ export const getName = () => {
 export const getAdmin = () => {
     return window.localStorage.getItem("isAdmin");
 }
+export const updateFavoriteCoctailsList = (item) => {
+    
+    window.localStorage.setItem("favoriteCoctailsList", JSON.stringify([...JSON.parse(window.localStorage.getItem("favoriteCoctailsList")), {"coctailId":item}]))
+}
+
+export const removeFavoriteCoctail = (item) => {
+    const currentList = JSON.parse(window.localStorage.getItem("favoriteCoctailsList"));
+    const updatedList = currentList.filter(cocktail => cocktail.coctailId !== item)
+    
+  
+    window.localStorage.setItem("favoriteCoctailsList", JSON.stringify(updatedList));
+  }
 
 export const loginRequest = async (loginData) => {
     
+
     await axios.post("http://localhost:5555/users/login", loginData)
       .then(response => {
         window.localStorage.setItem("token", response.data.token.token);
@@ -30,7 +46,7 @@ export const loginRequest = async (loginData) => {
         window.localStorage.setItem("isAdmin", response.data.user.isAdmin);
      })
     .catch(error => {
-        console.log(error);
+        console.log(error); 
         
     })
 }
