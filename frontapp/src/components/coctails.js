@@ -335,8 +335,8 @@ async  RemoveFavCoctail (id)  {
       <Table sx={{ minWidth: 650, maxWidth: '70vw'}} style={{margin: '20px 0px 0px 30px'}} aria-label="customized table" stickyHeader>
         <TableHead>
           <StyledTableRow >
-            <StyledTableCell>Id</StyledTableCell>
-            <StyledTableCell>Coctail name</StyledTableCell>
+            <StyledTableCell>Remove From Favourites</StyledTableCell>
+            <StyledTableCell>Coctail Name</StyledTableCell>
             <StyledTableCell>Description</StyledTableCell>
             <StyledTableCell align='right'>Ingridients</StyledTableCell>
           </StyledTableRow >
@@ -355,17 +355,11 @@ async  RemoveFavCoctail (id)  {
             >
               <TableCell component="th" scope="row">
               
-                {el.id}
+                
 
                 <Button startIcon={<Favorite color="primary" onClick={() => this.RemoveFavCoctail(el.id)}  />} >  </Button>
 
-                <div>
-                {isAdmin === "true" ? ( 
 
-                <Button onClick={() => this.DeleteCoctail(el.id)}  startIcon={<DeleteIcon color="action" />} >  </Button>
-
-                ) : null}
-                </div>
                 </TableCell>
               <TableCell component="th" scope="row">
                 {el.name}

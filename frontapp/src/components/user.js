@@ -69,7 +69,7 @@ const handleSubmit = (event) => {
     email: data.get('email'),
     password: data.get('password'),
   };
-  // console.log(loginData);
+ 
   
 };
 
@@ -151,6 +151,20 @@ export default class User extends React.Component{
     })
   } 
 
+  DeleteCoctail = (id)  => {
+    const token = getToken();
+    
+    const data = axios.delete(`http://localhost:5555/coctails/${id}`,{data:`"${token}"`} )
+    .then(response => {
+      
+       this.coctailsRequest();
+        return response.data 
+    })
+    .catch(error => {
+        console.log(error);
+    })
+};
+
   async FavCoctail (id)  {
     const config = { headers: {'Content-Type': 'application/json'} };
     const token = getToken()
@@ -169,7 +183,7 @@ export default class User extends React.Component{
   } 
 
   handleOpen = (event) => {
-    // console.log("odpaliles komentarz dla " + event.currentTarget.id)
+    
     this.setState({ open: true, currentCommentId: event.currentTarget.id });
 
   };
@@ -195,6 +209,10 @@ export default class User extends React.Component{
   };
 
 
+  handleClose2 = () => {
+    this.setState({ open: false });
+  };
+  
   handleClose = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -309,7 +327,7 @@ EditComment = (id,Commentdata2)  => {
     const comments = this.state.commentsData;
     const useriddelete = getId();
     const isAdmin = getAdmin();
-    // console.log(this.state.coctailsData)
+  
 
     return (
       <div>
@@ -383,15 +401,15 @@ EditComment = (id,Commentdata2)  => {
         
       }}>
       <TableContainer TableContainer sx={{maxHeight:"60vh", overflowY:"auto"}} >
-      <Table sx={{ minWidth: 650, maxWidth: '70vw'}} style={{margin: '20px 0px 0px 30px'}} aria-label="customized table" stickyHeader>
+      <Table sx={{ minWidth: 650, maxWidth: '100%'}} style={{margin: '0px 0px 0px 0px'}} aria-label="customized table" stickyHeader>
         <TableHead>
           <StyledTableRow >
-            <StyledTableCell>Id</StyledTableCell>
-            <StyledTableCell>Coctail name</StyledTableCell>
+            <StyledTableCell>Add To Favorite</StyledTableCell>
+            <StyledTableCell>Coctail Name</StyledTableCell>
             <StyledTableCell>Description</StyledTableCell>
-            
-            <StyledTableCell align="right">Comments</StyledTableCell>
-            <StyledTableCell ></StyledTableCell>
+            <StyledTableCell>Ingredients</StyledTableCell>
+            <StyledTableCell >Comments</StyledTableCell>
+            <StyledTableCell >Add New Comment</StyledTableCell>
             
           </StyledTableRow >
         </TableHead>
@@ -402,10 +420,17 @@ EditComment = (id,Commentdata2)  => {
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell component="th" scope="row">
-                {el.id}
+                
 
              <Button startIcon={<Favorite color="secondary" onClick={() => this.FavCoctail(el.id)}  />} >  </Button>
+             
+             <div>
+                {isAdmin === "true" ? ( 
 
+                <Button onClick={() => this.DeleteCoctail(el.id)}  startIcon={<DeleteIcon color="action" />} >  </Button>
+
+                ) : null}
+                </div>
               
                 </TableCell>
               <TableCell component="th" scope="row">
@@ -415,7 +440,20 @@ EditComment = (id,Commentdata2)  => {
                 {el.description}
               </TableCell>
 
-              <TableCell align="right" >
+              <TableCell>
+              
+              <div>{el.coctailIngridients.map((test) => {
+            return(<div>{test.name+" "+test.dose+"x"+test.unit}
+            </div>)
+                      }
+                    )
+                  }
+            </div>
+              
+              
+              </TableCell>
+
+              <TableCell  >
               
               <div>{comments?.map((test) => {
                 if(el.id === test.coctailId)
@@ -433,7 +471,7 @@ EditComment = (id,Commentdata2)  => {
             
             <Modal
           open={this.state.open2}
-          onClose={this.EditHandleClose}
+          onClose={this.EditHandleClose2}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
@@ -481,7 +519,7 @@ EditComment = (id,Commentdata2)  => {
               <Button  id={el.id} onClick={this.handleOpen} startIcon={<AddIcon /> }> </Button>
               <Modal
           open={this.state.open}
-          onClose={this.handleClose}
+          onClose={this.handleClose2}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
@@ -515,6 +553,16 @@ EditComment = (id,Commentdata2)  => {
               onSubmit={this.handleClose}
             >
               Add New Comment
+            </Button>
+
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              
+              onClick={this.handleClose2}
+            >
+              Close
             </Button>
           </Box>
           </Box>

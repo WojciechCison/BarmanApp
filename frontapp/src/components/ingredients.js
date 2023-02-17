@@ -91,6 +91,8 @@ export  const clearCacheData = async () => {
   localStorage.clear();
 };
 
+
+
 const theme = createTheme({
     status: {
       danger: '#e53e3e',
@@ -140,6 +142,10 @@ export default class Ingredients extends React.Component{
       unit: data.get("unit")
     }
     this.CreateIngridient(addNewIngridientData);
+    this.setState({ open: false });
+  };
+
+  handleClose3 = () => {
     this.setState({ open: false });
   };
 
@@ -291,7 +297,6 @@ CreateIngridient  = (Ingridientdata) => {
                 <TextField
                   required
                   name="name"
-                  required
                   fullWidth
                   id="name"
                   label="Ingridient Name"
@@ -320,6 +325,15 @@ CreateIngridient  = (Ingridientdata) => {
             >
               Create New Ingridient
             </Button>
+
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              onClick={this.handleClose2}
+            >
+              Close
+            </Button>
           </Box>
           </Box>
             </Modal>
@@ -340,7 +354,7 @@ CreateIngridient  = (Ingridientdata) => {
         <TableHead>
           <StyledTableRow>
             <StyledTableCell>Id</StyledTableCell>
-            <StyledTableCell>Ingridient name</StyledTableCell>
+            <StyledTableCell>Ingridient Name</StyledTableCell>
             <StyledTableCell>Quantity</StyledTableCell>
             <StyledTableCell align='right'>Unit</StyledTableCell>
           </StyledTableRow >
